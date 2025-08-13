@@ -1,0 +1,26 @@
+{
+  "flash_sound": {
+    "subtitle": "sounds.gracecraft.flashlight_flash",
+    "sounds": [
+      {
+        "name": "gracecraft:flash_sound"
+      }
+    ]
+  },
+  "dozy_attack": {
+    "subtitle": "sounds.gracecraft.dozy_attack",
+    "sounds": [
+      {
+        "name": "gracecraft:dozy_attack"
+      }
+    ]
+  },
+  "dozy_attack_kill": {
+    "subtitle": "sounds.gracecraft.dozy_attack_kill",
+    "sounds": [
+      {
+        "name": "gracecraft:dozy_attack_kill"
+      }
+    ]
+  }
+}

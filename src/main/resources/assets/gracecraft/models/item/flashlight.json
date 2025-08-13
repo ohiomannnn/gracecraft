@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "gracecraft:item/flashlight_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "gracecraft:item/flashlight_2d"
+    },
+    "ground": {
+      "parent": "gracecraft:item/flashlight_2d"
+    },
+    "fixed": {
+      "parent": "gracecraft:item/flashlight_2d"
+    }
+  }
+}
