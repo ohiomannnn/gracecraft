@@ -55,9 +55,8 @@ public class FlashlightItem extends Item {
             if (prev != null && !prev.equals(targetPos) && level.getBlockState(prev).is(Blocks.LIGHT)) {
                 level.setBlock(prev, Blocks.AIR.defaultBlockState(), 3);
             }
-
-            BlockState lightState = Blocks.LIGHT.defaultBlockState()
-                    .setValue(LightBlock.LEVEL, 12);
+                BlockState lightState = Blocks.LIGHT.defaultBlockState()
+                        .setValue(LightBlock.LEVEL, 12);
 
             if (level.getBlockState(targetPos).isAir() || level.getBlockState(targetPos).is(Blocks.LIGHT)) {
                 level.setBlock(targetPos, lightState, 3);
