@@ -15,11 +15,43 @@
       }
     ]
   },
+  "litany_attack": {
+    "subtitle": "sounds.gracecraft.litany_attack",
+    "sounds": [
+      {
+        "name": "gracecraft:litany_attack"
+      }
+    ]
+  },
   "dozy_attack_kill": {
     "subtitle": "sounds.gracecraft.dozy_attack_kill",
     "sounds": [
       {
         "name": "gracecraft:dozy_attack_kill"
+      }
+    ]
+  },
+  "litany_attack_fast": {
+    "subtitle": "sounds.gracecraft.litany_attack_fast",
+    "sounds": [
+      {
+        "name": "gracecraft:litany_attack_fast"
+      }
+    ]
+  },
+  "litany_attack_jumpscare": {
+    "subtitle": "sounds.gracecraft.litany_attack_jumpscare",
+    "sounds": [
+      {
+        "name": "gracecraft:litany_attack_jumpscare"
+      }
+    ]
+  },
+  "litany_attack_kill": {
+    "subtitle": "sounds.gracecraft.litany_attack_kill",
+    "sounds": [
+      {
+        "name": "gracecraft:litany_attack_kill"
       }
     ]
   }

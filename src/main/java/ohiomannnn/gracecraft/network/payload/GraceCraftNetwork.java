@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.net.payload;
+package ohiomannnn.gracecraft.network.payload;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -14,6 +14,7 @@ import ohiomannnn.gracecraft.GraceCraft;
 import java.util.UUID;
 
 import static ohiomannnn.gracecraft.util.DamageTypes.DOZER_ATTACK;
+import static ohiomannnn.gracecraft.util.DamageTypes.LITANY_ATTACK;
 
 public final class GraceCraftNetwork {
 
@@ -21,13 +22,18 @@ public final class GraceCraftNetwork {
         var registrar = event.registrar(GraceCraft.MOD_ID);
 
         registrar.playToServer(
-                KillPacket.TYPE,
-                KillPacket.STREAM_CODEC,
+                KillPacketDozer.TYPE,
+                KillPacketDozer.STREAM_CODEC,
                 GraceCraftNetwork::handleKillDozerBound
+        );
+        registrar.playToServer(
+                KillPacketLitany.TYPE,
+                KillPacketLitany.STREAM_CODEC,
+                GraceCraftNetwork::handleKillLitanyBound
         );
     }
 
-    private static void handleKillDozerBound(final KillPacket msg, final IPayloadContext ctx) {
+    private static void handleKillDozerBound(final KillPacketDozer msg, final IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer sender)) return;
 
@@ -38,7 +44,6 @@ public final class GraceCraftNetwork {
                 var entity = level.getEntity(target);
                 if (entity instanceof LivingEntity living) {
                     DamageSource src = new DamageSource(
-                            // Получаем Holder нужного типа через world.registryAccess
                             level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DOZER_ATTACK)
                     );
                     living.hurt(src, Float.MAX_VALUE);
@@ -46,9 +51,30 @@ public final class GraceCraftNetwork {
             }
         });
     }
+    private static void handleKillLitanyBound(final KillPacketLitany msg, final IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
+            if (!(ctx.player() instanceof ServerPlayer sender)) return;
 
-    public static void sendKillToServer(UUID target) {
-        PacketDistributor.sendToServer(new KillPacket(target));
+            MinecraftServer server = sender.server;
+            UUID target = msg.targetId();
+
+            for (ServerLevel level : server.getAllLevels()) {
+                var entity = level.getEntity(target);
+                if (entity instanceof LivingEntity living) {
+                    DamageSource src = new DamageSource(
+                            level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(LITANY_ATTACK)
+                    );
+                    living.hurt(src, Float.MAX_VALUE);
+                }
+            }
+        });
+    }
+
+    public static void sendKillToServerWDozer(UUID target) {
+        PacketDistributor.sendToServer(new KillPacketDozer(target));
+    }
+    public static void sendKillToServerWLitany(UUID target) {
+        PacketDistributor.sendToServer(new KillPacketLitany(target));
     }
     public static void sendOverlayToClient(ServerPlayer player, String overlayName) {
         PacketDistributor.sendToPlayer(player, new ShowOverlayPacket(overlayName));

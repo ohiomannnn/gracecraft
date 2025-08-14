@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.net.payload.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 
 import java.util.Random;
@@ -14,77 +14,75 @@ import java.util.UUID;
 
 public class EntityDozerOverlay extends Overlay {
     private static final ResourceLocation TEXTURE_START =
-            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/gui/entity_dozer.png");
+            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer.png");
     private static final ResourceLocation TEXTURE_END =
-            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/gui/entity_dozer_awake.png");
+            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer_awake.png");
 
-    private static final int END_PREVIEW_TICKS = 15;
-    private static final int AUTO_CLOSE_TICKS = 120;
+    private static final int OPEN_NO_KILL = 5;
+    private static final int OPEN_YES_KILL = 2;
+    private static final int TO_CLOSE_TICKS = 35;
 
     private static final int IMAGE_WIDTH = 128;
     private static final int IMAGE_HEIGHT = 128;
 
-    public int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-    public int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-
-    public static boolean isEntityDone;
     private static boolean isPlayed = false;
 
-    private int ticksOpen = 0;
     private final Random rng = new Random();
 
-    public static void killByUuidClient(UUID target) {
-        GraceCraftNetwork.sendKillToServer(target);
+    private long startTick = -1;
+
+    private static void killByUuidClient(UUID target) {
+        GraceCraftNetwork.sendKillToServerWDozer(target);
     }
 
-    public void tick() {
-        ticksOpen++;
-        isEntityDone = false;
-        if (ticksOpen == 0) {
-            isPlayed = false;
-        }
-        if (ticksOpen >= AUTO_CLOSE_TICKS) {
-            Minecraft.getInstance().setOverlay(null);
-            isEntityDone = true;
-        }
-    }
-    private void playSoundEntity(Player player, boolean audio) {
-        if (audio) {
+    private void playSoundEntity(Player player,int audio) {
+        if (audio == 1) {
             player.playSound(InitSounds.DOZY_ATTACK.get(), 1.0F, 1.0F);
-        } else {
+        } else if (audio == 2) {
             player.playSound(InitSounds.DOZY_ATTACK_KILL.get(), 1.0F, 1.0F);
         }
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        Minecraft mc = Minecraft.getInstance();
 
-        int x = (this.screenWidth - IMAGE_WIDTH) / 2  + rng.nextInt(3);
-        int y = (this.screenHeight - IMAGE_HEIGHT) / 2 + rng.nextInt(3);
+        if (mc.level == null) {
+            return;
+        }
+        if (startTick < 0) {
+            startTick = mc.level.getGameTime();
+        }
 
-        boolean showEnd = ticksOpen >= (AUTO_CLOSE_TICKS - END_PREVIEW_TICKS);
+        long gameTicks = mc.level.getGameTime() - startTick;
+        int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+
+        int x = (screenWidth - IMAGE_WIDTH) / 2  + rng.nextInt(2);
+        int y = (screenHeight - IMAGE_HEIGHT) / 2 + rng.nextInt(2);
+
+        boolean showEnd = gameTicks >= (TO_CLOSE_TICKS - OPEN_NO_KILL);
         ResourceLocation tex = showEnd ? TEXTURE_END : TEXTURE_START;
 
         guiGraphics.blit(tex, x, y, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
-        if (isEntityDone) {
-            isPlayed = false;
-        }
-
-        tick();
-
         if (!isPlayed) {
-            playSoundEntity(Minecraft.getInstance().player, true);
+            playSoundEntity(Minecraft.getInstance().player, 1);
             isPlayed = true;
         }
 
-        if (EntityDozerOverlay.isEntityDone && !GraceCraft.isCrouching) {
-            playSoundEntity(Minecraft.getInstance().player, false);
+        if (gameTicks >= TO_CLOSE_TICKS) {
+            mc.setOverlay(null);
+            isPlayed = false;
+        }
+
+        if (gameTicks >= (TO_CLOSE_TICKS - OPEN_YES_KILL) && !GraceCraft.isCrouching) {
+            playSoundEntity(Minecraft.getInstance().player, 2);
             killByUuidClient(Minecraft.getInstance().player.getUUID());
             Minecraft.getInstance().setOverlay(new DozerKillOverlay());
+            isPlayed = false;
         }
     }
-
     @Override
     public boolean isPauseScreen() {
         return false;

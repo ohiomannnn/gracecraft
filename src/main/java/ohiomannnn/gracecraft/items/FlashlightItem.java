@@ -1,6 +1,7 @@
 package ohiomannnn.gracecraft.items;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -41,9 +42,28 @@ public class FlashlightItem extends Item {
         if (selected && !player.isSpectator()) {
             BlockPos targetPos;
 
-            HitResult hit = player.pick(8.0D, 0.0F, true);
+            HitResult hit = player.pick(8.0D, 0.0F, false);
+
             if (hit.getType() == HitResult.Type.BLOCK) {
-                targetPos = ((BlockHitResult) hit).getBlockPos().relative(((BlockHitResult) hit).getDirection());
+                BlockPos hitPos = ((BlockHitResult) hit).getBlockPos();
+                Direction face = ((BlockHitResult) hit).getDirection();
+
+                BlockPos abovePos = hitPos.above();
+                BlockPos eastPos = hitPos.east();
+                BlockPos northPos = hitPos.north();
+                BlockPos westPos = hitPos.west();
+                BlockPos southPos = hitPos.south();
+
+                if (level.getBlockState(southPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK)  && level.getBlockState(abovePos).is(Blocks.SNOW)||
+                        level.getBlockState(northPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK)   && level.getBlockState(abovePos).is(Blocks.SNOW)||
+                        level.getBlockState(westPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK)   && level.getBlockState(abovePos).is(Blocks.SNOW)||
+                        level.getBlockState(eastPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK) && level.getBlockState(abovePos).is(Blocks.SNOW)) {
+                    targetPos = hitPos.above(2);
+                } else if (level.getBlockState(abovePos).is(Blocks.SHORT_GRASS)) {
+                    targetPos = hitPos.above(2);
+                } else {
+                    targetPos = hitPos.relative(face);
+                }
             } else {
                 Vec3 eyePos = player.getEyePosition();
                 Vec3 lookVec = player.getLookAngle().normalize().scale(8.0D);
@@ -55,8 +75,8 @@ public class FlashlightItem extends Item {
             if (prev != null && !prev.equals(targetPos) && level.getBlockState(prev).is(Blocks.LIGHT)) {
                 level.setBlock(prev, Blocks.AIR.defaultBlockState(), 3);
             }
-                BlockState lightState = Blocks.LIGHT.defaultBlockState()
-                        .setValue(LightBlock.LEVEL, 12);
+            BlockState lightState = Blocks.LIGHT.defaultBlockState()
+                    .setValue(LightBlock.LEVEL, 12);
 
             if (level.getBlockState(targetPos).isAir() || level.getBlockState(targetPos).is(Blocks.LIGHT)) {
                 level.setBlock(targetPos, lightState, 3);
@@ -87,7 +107,7 @@ public class FlashlightItem extends Item {
 
             BlockPos pos = LAST_POS.get(player.getUUID());
             if (pos != null && level.getBlockState(pos).is(Blocks.LIGHT)) {
-                level.setBlock(pos, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15), 3);
+                level.setBlock(pos, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 13), 3);
                 level.scheduleTick(pos, Blocks.LIGHT, 20);
             }
         }

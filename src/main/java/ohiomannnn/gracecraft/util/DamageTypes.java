@@ -9,6 +9,6 @@ import ohiomannnn.gracecraft.GraceCraft;
 public class DamageTypes {
     public static final ResourceKey<DamageType> DOZER_ATTACK =
             ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "dozer_attack"));
-
-
+    public static final ResourceKey<DamageType> LITANY_ATTACK =
+            ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "litany_attack"));
 }

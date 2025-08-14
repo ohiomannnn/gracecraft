@@ -9,7 +9,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import ohiomannnn.gracecraft.net.payload.GraceCraftClientNetwork;
+import ohiomannnn.gracecraft.network.payload.GraceCraftClientNetwork;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = GraceCraft.MOD_ID, dist = Dist.CLIENT)

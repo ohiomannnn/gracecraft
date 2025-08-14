@@ -1,10 +1,11 @@
-package ohiomannnn.gracecraft.net.payload;
+package ohiomannnn.gracecraft.network.payload;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.EntityDozerOverlay;
+import ohiomannnn.gracecraft.entityLogic.EntityLitanyOverlay;
 
 public final class GraceCraftClientNetwork {
     public static void registerClientPayloads(RegisterPayloadHandlersEvent event) {
@@ -21,6 +22,9 @@ public final class GraceCraftClientNetwork {
         ctx.enqueueWork(() -> {
             if ("EntityDozer".equals(msg.overlayName())) {
                 Minecraft.getInstance().setOverlay(new EntityDozerOverlay());
+            }
+            if ("EntityLitany".equals(msg.overlayName())) {
+                Minecraft.getInstance().setOverlay(new EntityLitanyOverlay());
             }
             // add other overlayes (entities) here
         });

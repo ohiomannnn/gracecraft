@@ -1,0 +1,7 @@
+{
+  "message_id": "litany_attack",
+  "scaling": "never",
+  "exhaustion": 10,
+  "effects": "hurt",
+  "death_message_type": "default"
+}

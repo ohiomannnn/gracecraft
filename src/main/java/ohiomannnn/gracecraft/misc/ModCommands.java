@@ -7,13 +7,13 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import ohiomannnn.gracecraft.net.payload.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
 
 public class ModCommands {
     private static final SuggestionProvider<CommandSourceStack> OVERLAY_SUGGESTIONS =
             (context, builder) -> {
                 builder.suggest("EntityDozer");
+                builder.suggest("EntityLitany");
                 return builder.buildFuture();
             };
 

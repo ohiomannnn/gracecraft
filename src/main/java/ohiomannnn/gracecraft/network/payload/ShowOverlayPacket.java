@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.net.payload;
+package ohiomannnn.gracecraft.network.payload;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

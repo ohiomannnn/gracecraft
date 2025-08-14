@@ -16,7 +16,7 @@ public class CreativeModeTabs {
 
     public static final Supplier<CreativeModeTab> GRACE_ITEMS_TAB = CREATIVE_MOD_TAB.register("grace_items_tab", () -> CreativeModeTab.builder()
             .icon(() -> new ItemStack(InitItems.FLASHLIGHT.get()))
-            .title(Component.translatable("creative."+ GraceCraft.MOD_ID +".grace_items_tab"))
+            .title(Component.translatable("creative." + GraceCraft.MOD_ID + ".grace_items_tab"))
             .displayItems((itemDisplayParameters, output) -> {
                 output.accept(InitItems.FLASHLIGHT);
             })

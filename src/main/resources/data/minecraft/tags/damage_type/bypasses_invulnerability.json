@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "gracecraft:dozer_attack"
+    "gracecraft:dozer_attack",
+    "gracecraft:litany_attack"
   ]
 }
