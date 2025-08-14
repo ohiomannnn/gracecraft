@@ -85,7 +85,13 @@ public class FlashlightItem extends Item {
                     InitSounds.FLASH_SOUND.get(),
                     SoundSource.PLAYERS,
                     1.0f, randFloat(1.0f, 1.5f));
+
+            BlockPos pos = LAST_POS.get(player.getUUID());
+            if (pos != null && level.getBlockState(pos).is(Blocks.LIGHT)) {
+                level.setBlock(pos, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15), 3);
+                level.scheduleTick(pos, Blocks.LIGHT, 20);
+            }
         }
-        return super.use(level, player, hand);
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
     }
 }
