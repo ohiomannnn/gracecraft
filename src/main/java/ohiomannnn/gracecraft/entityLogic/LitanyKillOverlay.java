@@ -40,7 +40,7 @@ public class LitanyKillOverlay extends Overlay {
 
     private final net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create();
 
-    private static final ResourceLocation TEXTURE =
+    private static final ResourceLocation TEX =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_kill.png");
 
     @Override
@@ -60,7 +60,7 @@ public class LitanyKillOverlay extends Overlay {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
-        guiGraphics.blit(TEXTURE, EntityLitanyOverlay.baseX, EntityLitanyOverlay.baseY,
+        guiGraphics.blit(TEX, EntityLitanyOverlay.baseX, EntityLitanyOverlay.baseY,
                 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         // 1) ~1.3 s
