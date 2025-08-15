@@ -10,20 +10,41 @@ import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 
 public class EntityLitanyOverlay extends Overlay {
-    private static final ResourceLocation TEX_BASE =
-            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany.png");
-    private static final ResourceLocation TEX_OPENING =
-            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_opening.png");
-    private static final ResourceLocation TEX_OPEN =
-            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_open.png");
+    public enum EyeStage {
+        OPENING, OPEN
+    }
 
-    private static final int IMAGE_WIDTH  = 128;
-    private static final int IMAGE_HEIGHT = 128;
+    public enum EyePosition {
+        LEFT, CENTER, RIGHT
+    }
+    private static final Map<EyePosition, Map<EyeStage, ResourceLocation>> EYE_TEXTURES = new HashMap<>();
+
+    private static final ResourceLocation BASE =
+            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany.png");
+    static {
+        EYE_TEXTURES.put(EyePosition.LEFT, Map.of(
+                EyeStage.OPENING, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_opening_left.png"),
+                EyeStage.OPEN, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_open_left.png")
+        ));
+        EYE_TEXTURES.put(EyePosition.CENTER, Map.of(
+                EyeStage.OPENING, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_opening_center.png"),
+                EyeStage.OPEN, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_open_center.png")
+        ));
+        EYE_TEXTURES.put(EyePosition.RIGHT, Map.of(
+                EyeStage.OPENING, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_opening_right.png"),
+                EyeStage.OPEN, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_open_right.png")
+        ));
+    }
+
+    private static final int IMAGE_WIDTH  = 186;
+    private static final int IMAGE_HEIGHT = 186;
 
     private static final int DURATION_TICKS      = 60;
     private static final int MID_SWITCH_TICKS    = 44;
@@ -33,7 +54,7 @@ public class EntityLitanyOverlay extends Overlay {
 
     private static int statePlayed = 1;
 
-    public static boolean isCrouchingLit;
+    public static boolean isCrouchingLitany;
 
     private void playSoundEntity(Player player, int audio) {
         if (audio == 1) {
@@ -46,21 +67,21 @@ public class EntityLitanyOverlay extends Overlay {
             player.playSound(InitSounds.LITANY_ATTACK_KILL.get(), 1.0F, 1.0F);
         }
     }
-    private static void killByUuidClient(UUID target) {
+    private static void killByUuid(UUID target) {
         GraceCraftNetwork.sendKillToServerWLitany(target);
     }
     private void killOnNoCrouch(boolean crouch) {
         if (!crouch) {
             Minecraft mc = Minecraft.getInstance();
-            Player self = mc.player;
+            Player player = mc.player;
 
-            playSoundEntity(self, 4);
-            killByUuidClient(self.getUUID());
+            playSoundEntity(player, 4);
+            killByUuid(player.getUUID());
 
             LitanyKillOverlay overlay = new LitanyKillOverlay();
             mc.setOverlay(overlay);
         }
-    };
+    }
 
     private final Random rng = new Random();
 
@@ -86,25 +107,40 @@ public class EntityLitanyOverlay extends Overlay {
 
         long ticksInCycle = t - cycleStartTick;
 
-        ResourceLocation tex;
+        ResourceLocation tex = null;
         if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS) {
-            tex = TEX_OPEN;
+            // Third phase
             SHAKE_AMPLITUDE = 1;
-            killOnNoCrouch(isCrouchingLit);
+            if (cyclesDone == 0) {
+                tex = EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPEN);
+            } else if (cyclesDone == 1) {
+                tex = EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPEN);
+            } else if (cyclesDone == 2) {
+                tex = EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPEN);
+            }
+            killOnNoCrouch(isCrouchingLitany);
             if (statePlayed == 3) {
                 playSoundEntity(player, 3);
                 statePlayed = 1;
             }
         } else if (ticksInCycle >= MID_SWITCH_TICKS) {
-            tex = TEX_OPENING;
+            // Second phase
             SHAKE_AMPLITUDE = 6;
+            if (cyclesDone == 0) {
+                tex = EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPENING);
+            } else if (cyclesDone == 1) {
+                tex = EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPENING);
+            } else if (cyclesDone == 2) {
+                tex = EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPENING);
+            }
             if (statePlayed == 2) {
                 playSoundEntity(player, 2);
                 statePlayed = 3;
             }
         } else {
-            tex = TEX_BASE;
+            // First phase
             SHAKE_AMPLITUDE = 2;
+            tex = BASE;
             if (statePlayed == 1) {
                 playSoundEntity(player, 1);
                 statePlayed = 2;

@@ -13,8 +13,8 @@ import java.util.List;
 
 public class LitanyKillOverlay extends Overlay {
 
-    private static final int IMAGE_WIDTH = 128;
-    private static final int IMAGE_HEIGHT = 128;
+    private static final int IMAGE_WIDTH = 186;
+    private static final int IMAGE_HEIGHT = 186;
 
     private static final int TICKS_FIRST = 27;   // ~1.3 s
     private static final int TICKS_SECOND = 35;  // ~1.7 s
@@ -22,8 +22,12 @@ public class LitanyKillOverlay extends Overlay {
     private static final int TICKS_BARRAGE = 43; // ~2.2 s
     private static final int AUTO_CLOSE_TICKS = 94;
 
-    private static final float MAX_SCALE = 4.1f;
-    private static final float MIN_SCALE = 0.8f;
+    private static final float MAX_SCALE_HEIGHT = 4.7f;
+    private static final float MIN_SCALE_HEIGHT = 0.8f;
+
+    private static final float MAX_SCALE_WIDTH = 5.5f;
+    private static final float MIN_SCALE_WIDTH = 1.0f;
+
 
     private final List<TextEntry> messages = new ArrayList<>();
 
@@ -61,7 +65,7 @@ public class LitanyKillOverlay extends Overlay {
 
         // 1) ~1.3 s
         if (!firstAdded && gameTicks >= TICKS_FIRST) {
-            messages.add(new TextEntry("why did you listen?", 10, screenHeight - 30, 2.0f, 2.0f));
+            messages.add(new TextEntry("why did you listen?", random.nextInt(Math.max(1, screenWidth - 20)) + 10, random.nextInt(Math.max(1, screenHeight - 20)) + 10, 2.0f, 2.0f));
             firstAdded = true;
         }
 
@@ -85,12 +89,12 @@ public class LitanyKillOverlay extends Overlay {
         }
 
         if (barrageStarted) {
-            int perTick = 2;
+            int perTick = 1;
             for (int i = 0; i < perTick; i++) {
-                float sx = randScale();
-                float sy = randScale();
-                int x = random.nextInt(Math.max(1, screenWidth - 20)) + 10;
-                int y = random.nextInt(Math.max(1, screenHeight - 20)) + 10;
+                float sx = randScaleWidth();
+                float sy = randScaleHeight();
+                int x = random.nextInt(Math.max(1, screenWidth)) + 10;
+                int y = random.nextInt(Math.max(1, screenHeight)) + 10;
                 messages.add(new TextEntry("why did you listen?", x, y, sx, sy));
             }
         }
@@ -113,9 +117,11 @@ public class LitanyKillOverlay extends Overlay {
             poseStack.popPose();
         }
     }
-
-    private float randScale() {
-        return MIN_SCALE + random.nextFloat() * (MAX_SCALE - MIN_SCALE);
+    private float randScaleHeight() {
+        return MIN_SCALE_HEIGHT + random.nextFloat() * (MAX_SCALE_HEIGHT - MIN_SCALE_HEIGHT);
+    }
+    private float randScaleWidth() {
+        return MIN_SCALE_WIDTH + random.nextFloat() * (MAX_SCALE_WIDTH - MIN_SCALE_WIDTH);
     }
 
     private static class TextEntry {

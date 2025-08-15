@@ -18,20 +18,20 @@ public class EntityDozerOverlay extends Overlay {
     private static final ResourceLocation TEXTURE_END =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer_awake.png");
 
-    private static final int OPEN_NO_KILL = 5;
-    private static final int OPEN_YES_KILL = 2;
+    private static final int OPEN_WITH_NO_KILL = 5;
+    private static final int OPEN_WITH_KILL = 2;
     private static final int TO_CLOSE_TICKS = 35;
 
     private static final int IMAGE_WIDTH = 128;
     private static final int IMAGE_HEIGHT = 128;
 
-    private static boolean isPlayed = false;
+    private static boolean soundPlayed = false;
 
     private final Random rng = new Random();
 
     private long startTick = -1;
 
-    private static void killByUuidClient(UUID target) {
+    private static void killByUuid(UUID target) {
         GraceCraftNetwork.sendKillToServerWDozer(target);
     }
 
@@ -61,26 +61,26 @@ public class EntityDozerOverlay extends Overlay {
         int x = (screenWidth - IMAGE_WIDTH) / 2  + rng.nextInt(2);
         int y = (screenHeight - IMAGE_HEIGHT) / 2 + rng.nextInt(2);
 
-        boolean showEnd = gameTicks >= (TO_CLOSE_TICKS - OPEN_NO_KILL);
+        boolean showEnd = gameTicks >= (TO_CLOSE_TICKS - OPEN_WITH_NO_KILL);
         ResourceLocation tex = showEnd ? TEXTURE_END : TEXTURE_START;
 
         guiGraphics.blit(tex, x, y, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
-        if (!isPlayed) {
+        if (!soundPlayed) {
             playSoundEntity(Minecraft.getInstance().player, 1);
-            isPlayed = true;
+            soundPlayed = true;
         }
 
         if (gameTicks >= TO_CLOSE_TICKS) {
             mc.setOverlay(null);
-            isPlayed = false;
+            soundPlayed = false;
         }
 
-        if (gameTicks >= (TO_CLOSE_TICKS - OPEN_YES_KILL) && !GraceCraft.isCrouching) {
+        if (gameTicks >= (TO_CLOSE_TICKS - OPEN_WITH_KILL) && !GraceCraft.isCrouching) {
             playSoundEntity(Minecraft.getInstance().player, 2);
-            killByUuidClient(Minecraft.getInstance().player.getUUID());
+            killByUuid(Minecraft.getInstance().player.getUUID());
             Minecraft.getInstance().setOverlay(new DozerKillOverlay());
-            isPlayed = false;
+            soundPlayed = false;
         }
     }
     @Override

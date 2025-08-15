@@ -57,11 +57,10 @@ public class DozerKillOverlay extends Overlay {
 
         if (!firstMessageShown && gameTicks <= 8) {
             messages.add(new TextEntry("will you wake up tomorrow?", 15, screenHeight - 50));
-            guiGraphics.drawString(font, "will you wake up tomorrow?", 15 , screenHeight - 50, 0xFFFFFF, false);
             firstMessageShown = true;
         }
 
-        if (firstMessageShown && gameTicks >= 12) {
+        if (firstMessageShown && gameTicks >= 9) {
             TextEntry last = messages.getLast();
             messages.add(new TextEntry(
                     "will you wake up tomorrow?",
@@ -72,13 +71,13 @@ public class DozerKillOverlay extends Overlay {
 
         PoseStack poseStack = guiGraphics.pose();
         poseStack.pushPose();
-        poseStack.scale(4.0f, 6.0f, 1.0f);
+        poseStack.scale(4.0f, 8.0f, 1.0f);
 
         for (TextEntry entry : messages) {
             guiGraphics.drawString(font,
                     entry.text,
                     (int)(entry.x / 4.0f),
-                    (int)(entry.y / 6.0f),
+                    (int)(entry.y / 8.0f),
                     0xFFFFFF, false
             );
         }

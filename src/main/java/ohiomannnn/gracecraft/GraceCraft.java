@@ -18,7 +18,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
-import static ohiomannnn.gracecraft.entityLogic.EntityLitanyOverlay.isCrouchingLit;
+import static ohiomannnn.gracecraft.entityLogic.EntityLitanyOverlay.isCrouchingLitany;
 
 @Mod(GraceCraft.MOD_ID)
 public class GraceCraft {
@@ -62,7 +62,7 @@ public class GraceCraft {
                         !mc.options.keySprint.isDown();
 
         isCrouching = shiftDown && noOtherKeys;
-        isCrouchingLit = shiftDown;
+        isCrouchingLitany = shiftDown;
     }
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
