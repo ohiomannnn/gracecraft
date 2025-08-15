@@ -20,12 +20,13 @@ public class LitanyKillOverlay extends Overlay {
     private static final int TICKS_SECOND = 35;  // ~1.7 s
     private static final int TICKS_THIRD = 40;   // ~2.0 s
     private static final int TICKS_BARRAGE = 43; // ~2.2 s
-    private static final int AUTO_CLOSE_TICKS = 90;
+    private static final int AUTO_CLOSE_TICKS = 94;
 
-    private static final float MAX_SCALE = 4.0f;
-    private static final float MIN_SCALE = 1.0f;
+    private static final float MAX_SCALE = 4.1f;
+    private static final float MIN_SCALE = 0.8f;
 
     private final List<TextEntry> messages = new ArrayList<>();
+
     private boolean firstAdded = false;
     private boolean secondAdded = false;
     private boolean thirdAdded = false;

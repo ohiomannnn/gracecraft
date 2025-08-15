@@ -17,15 +17,10 @@ public class DozerKillOverlay extends Overlay {
 
     private final List<TextEntry> messages = new ArrayList<>();
 
-    private static final int TO_CLOSE_TICKS = 20;
-
-    private int ticksOpen = 0;
+    private static final int TO_CLOSE_TICKS = 28;
 
     private static final int IMAGE_WIDTH = 128;
     private static final int IMAGE_HEIGHT = 128;
-
-    public int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-    public int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
     private boolean firstMessageShown = false;
 
@@ -48,8 +43,8 @@ public class DozerKillOverlay extends Overlay {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
-        int ximg = (this.screenWidth - IMAGE_WIDTH) / 2;
-        int yimg = (this.screenHeight - IMAGE_HEIGHT) / 2;
+        int ximg = (screenWidth - IMAGE_WIDTH) / 2;
+        int yimg = (screenHeight - IMAGE_HEIGHT) / 2;
 
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
@@ -60,13 +55,13 @@ public class DozerKillOverlay extends Overlay {
             mc.setOverlay(null);
         }
 
-        if (!firstMessageShown && gameTicks <= 5) {
-            messages.add(new TextEntry("will you wake up tomorrow?", 10, screenHeight - 30));
-            guiGraphics.drawString(font, "will you wake up tomorrow?", 15 , screenHeight - 30, 0xFFFFFF, false);
+        if (!firstMessageShown && gameTicks <= 8) {
+            messages.add(new TextEntry("will you wake up tomorrow?", 15, screenHeight - 50));
+            guiGraphics.drawString(font, "will you wake up tomorrow?", 15 , screenHeight - 50, 0xFFFFFF, false);
             firstMessageShown = true;
         }
 
-        if (firstMessageShown && gameTicks >= 5 && gameTicks % 2 == 0) {
+        if (firstMessageShown && gameTicks >= 12) {
             TextEntry last = messages.getLast();
             messages.add(new TextEntry(
                     "will you wake up tomorrow?",

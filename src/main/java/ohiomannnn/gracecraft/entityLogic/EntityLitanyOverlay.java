@@ -27,7 +27,7 @@ public class EntityLitanyOverlay extends Overlay {
 
     private static final int DURATION_TICKS      = 60;
     private static final int MID_SWITCH_TICKS    = 44;
-    private static final int FINAL_SWITCH_TICKS  = 8;
+    private static final int FINAL_SWITCH_TICKS  = 5;
     private static final int CYCLES_TOTAL        = 3;
     private static int SHAKE_AMPLITUDE = 2;
 
