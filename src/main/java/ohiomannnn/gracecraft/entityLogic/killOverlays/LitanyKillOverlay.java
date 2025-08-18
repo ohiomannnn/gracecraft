@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.entityLogic;
+package ohiomannnn.gracecraft.entityLogic.killOverlays;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -7,14 +7,15 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitanyOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LitanyKillOverlay extends Overlay {
 
-    private static final int IMAGE_WIDTH = 186;
-    private static final int IMAGE_HEIGHT = 186;
+    private static final int IMAGE_WIDTH = 165;
+    private static final int IMAGE_HEIGHT = 165;
 
     private static final int TICKS_FIRST = 27;   // ~1.3 s
     private static final int TICKS_SECOND = 35;  // ~1.7 s

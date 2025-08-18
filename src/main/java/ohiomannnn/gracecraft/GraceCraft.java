@@ -2,23 +2,30 @@ package ohiomannnn.gracecraft;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import ohiomannnn.gracecraft.blocks.InitBlocks;
 import ohiomannnn.gracecraft.misc.CreativeModeTabs;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.ModCommands;
-import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
-import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import ohiomannnn.gracecraft.util.ItemCheck;
+import org.slf4j.Logger;
 
-import static ohiomannnn.gracecraft.entityLogic.EntityLitanyOverlay.isCrouchingLitany;
+import static ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitanyOverlay.isCrouchingLitany;
 
 @Mod(GraceCraft.MOD_ID)
 public class GraceCraft {
@@ -39,6 +46,7 @@ public class GraceCraft {
     private void commonSetup(FMLCommonSetupEvent event) {}
 
     public static boolean isCrouching;
+
     @SubscribeEvent
     public void onKeyInput(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();

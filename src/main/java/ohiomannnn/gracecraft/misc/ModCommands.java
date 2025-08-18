@@ -7,7 +7,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 
 public class ModCommands {
     private static final SuggestionProvider<CommandSourceStack> OVERLAY_SUGGESTIONS =

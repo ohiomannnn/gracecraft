@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.network.payload;
+package ohiomannnn.gracecraft.network;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;

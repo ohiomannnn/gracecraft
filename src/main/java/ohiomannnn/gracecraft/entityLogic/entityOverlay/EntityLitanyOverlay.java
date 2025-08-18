@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.entityLogic;
+package ohiomannnn.gracecraft.entityLogic.entityOverlay;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -7,8 +7,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
+import ohiomannnn.gracecraft.entityLogic.killOverlays.LitanyKillOverlay;
+import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,6 @@ public class EntityLitanyOverlay extends Overlay {
         LEFT, CENTER, RIGHT
     }
     private static final Map<EyePosition, Map<EyeStage, ResourceLocation>> EYE_TEXTURES = new HashMap<>();
-
     private static final ResourceLocation BASE =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany.png");
     static {
@@ -43,13 +44,16 @@ public class EntityLitanyOverlay extends Overlay {
         ));
     }
 
-    private static final int IMAGE_WIDTH  = 186;
-    private static final int IMAGE_HEIGHT = 186;
+    private static final int IMAGE_WIDTH  = 165;
+    private static final int IMAGE_HEIGHT = 165;
 
-    private static final int DURATION_TICKS      = 60;
-    private static final int MID_SWITCH_TICKS    = 44;
-    private static final int FINAL_SWITCH_TICKS  = 5;
-    private static final int CYCLES_TOTAL        = 3;
+    private static final int DURATION_TICKS           = 60;
+    private static final int MID_SWITCH_TICKS         = 44;
+    private static final int FINAL_SWITCH_TICKS       = 4;
+    private static final int FINAL_SWITCH_TICKS_KILL  = 1;
+    private static final int CYCLES_TOTAL             = 3;
+
+    private static ResourceLocation texture;
     private static int SHAKE_AMPLITUDE = 2;
 
     private static int statePlayed = 1;
@@ -92,7 +96,7 @@ public class EntityLitanyOverlay extends Overlay {
     public static int baseY;
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = mc.level;
         if (level == null) return;
@@ -107,40 +111,41 @@ public class EntityLitanyOverlay extends Overlay {
 
         long ticksInCycle = t - cycleStartTick;
 
-        ResourceLocation tex = null;
+        if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS_KILL) {
+            killOnNoCrouch(isCrouchingLitany);
+        }
         if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS) {
-            // Third phase
+            // Eye opened
             SHAKE_AMPLITUDE = 1;
             if (cyclesDone == 0) {
-                tex = EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPEN);
+                texture = EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPEN);
             } else if (cyclesDone == 1) {
-                tex = EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPEN);
+                texture = EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPEN);
             } else if (cyclesDone == 2) {
-                tex = EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPEN);
+                texture = EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPEN);
             }
-            killOnNoCrouch(isCrouchingLitany);
             if (statePlayed == 3) {
                 playSoundEntity(player, 3);
                 statePlayed = 1;
             }
         } else if (ticksInCycle >= MID_SWITCH_TICKS) {
-            // Second phase
+            // Opening eye
             SHAKE_AMPLITUDE = 6;
             if (cyclesDone == 0) {
-                tex = EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPENING);
+                texture = EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPENING);
             } else if (cyclesDone == 1) {
-                tex = EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPENING);
+                texture = EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPENING);
             } else if (cyclesDone == 2) {
-                tex = EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPENING);
+                texture = EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPENING);
             }
             if (statePlayed == 2) {
                 playSoundEntity(player, 2);
                 statePlayed = 3;
             }
         } else {
-            // First phase
+            // Closed eye
             SHAKE_AMPLITUDE = 2;
-            tex = BASE;
+            texture = BASE;
             if (statePlayed == 1) {
                 playSoundEntity(player, 1);
                 statePlayed = 2;
@@ -150,13 +155,12 @@ public class EntityLitanyOverlay extends Overlay {
         int shakeX = baseX + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
         int shakeY = baseY + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
 
-        guiGraphics.blit(tex, shakeX, shakeY, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+        guiGraphics.blit(texture, shakeX, shakeY, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         if (ticksInCycle >= DURATION_TICKS) {
             cyclesDone++;
             if (cyclesDone >= CYCLES_TOTAL) {
                 mc.setOverlay(null);
-                return;
             }
             cycleStartTick = t;
             chooseNewPosition(mc);

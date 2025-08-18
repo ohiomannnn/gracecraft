@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.entityLogic;
+package ohiomannnn.gracecraft.entityLogic.killOverlays;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;

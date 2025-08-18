@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.entityLogic;
+package ohiomannnn.gracecraft.entityLogic.entityOverlay;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -6,7 +6,8 @@ import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.network.payload.GraceCraftNetwork;
+import ohiomannnn.gracecraft.entityLogic.killOverlays.DozerKillOverlay;
+import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 
 import java.util.Random;
