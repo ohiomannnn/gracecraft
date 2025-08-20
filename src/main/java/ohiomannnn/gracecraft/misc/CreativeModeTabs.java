@@ -19,6 +19,7 @@ public class CreativeModeTabs {
             .title(Component.translatable("creative." + GraceCraft.MOD_ID + ".grace_items_tab"))
             .displayItems((itemDisplayParameters, output) -> {
                 output.accept(InitItems.FLASHLIGHT);
+                output.accept(InitItems.DOOMBRINGER);
             })
             .build());
 

@@ -13,8 +13,12 @@ public class InitSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, GraceCraft.MOD_ID);
 
     public static final Supplier<SoundEvent> FLASH_SOUND = registerSoundEvent("flash_sound");
+
+    public static final Supplier<SoundEvent> DOOM_SQUEAK = registerSoundEvent("doombringer_squeak");
+
     public static final Supplier<SoundEvent> DOZY_ATTACK = registerSoundEvent("dozy_attack");
     public static final Supplier<SoundEvent> DOZY_ATTACK_KILL = registerSoundEvent("dozy_attack_kill");
+
     public static final Supplier<SoundEvent> LITANY_ATTACK = registerSoundEvent("litany_attack");
     public static final Supplier<SoundEvent> LITANY_ATTACK_FAST = registerSoundEvent("litany_attack_fast");
     public static final Supplier<SoundEvent> LITANY_ATTACK_JUMPSCARE = registerSoundEvent("litany_attack_jumpscare");

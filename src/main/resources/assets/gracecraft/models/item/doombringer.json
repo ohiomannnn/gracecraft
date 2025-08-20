@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "gracecraft:item/doombringer_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "gracecraft:item/doombringer_2d"
+    },
+    "fixed": {
+      "parent": "gracecraft:item/doombringer_2d"
+    }
+  }
+}

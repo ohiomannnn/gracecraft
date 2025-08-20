@@ -7,6 +7,14 @@
       }
     ]
   },
+  "doombringer_squeak": {
+    "subtitle": "sounds.gracecraft.doombringer_squeak",
+    "sounds": [
+      {
+        "name": "gracecraft:doombringer_squeak"
+      }
+    ]
+  },
   "dozy_attack": {
     "subtitle": "sounds.gracecraft.dozy_attack",
     "sounds": [
