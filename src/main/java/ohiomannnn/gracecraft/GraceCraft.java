@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ohiomannnn.gracecraft.blocks.InitBlocks;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.CreativeModeTabs;
-import ohiomannnn.gracecraft.misc.ModCommands;
+import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.slf4j.Logger;
@@ -38,6 +38,11 @@ public class GraceCraft {
     }
     private void commonSetup(FMLCommonSetupEvent event) {}
 
+    @SubscribeEvent
+    public void registerCommands(RegisterCommandsEvent event) {
+        InitCommands.register(event.getDispatcher());
+    }
+
     public static boolean isCrouching;
 
     @SubscribeEvent
@@ -58,9 +63,5 @@ public class GraceCraft {
 
         isCrouching = shiftDown && noOtherKeys;
         isCrouchingLitany = shiftDown;
-    }
-    @SubscribeEvent
-    public void onRegisterCommands(RegisterCommandsEvent event) {
-        ModCommands.register(event.getDispatcher());
     }
 }

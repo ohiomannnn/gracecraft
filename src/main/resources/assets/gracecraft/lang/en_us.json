@@ -7,13 +7,14 @@
   "creative.gracecraft.grace_items_tab": "Gracecraft Items",
 
   "sounds.gracecraft.flashlight_flash": "Flashlight Flashed",
+  "sounds.gracecraft.doombringer_squeak": "Joey Squeaks",
+
   "sounds.gracecraft.dozy_attack": "Dozer Attacks",
   "sounds.gracecraft.dozy_attack_kill": "will you wake up tomorrow?",
   "sounds.gracecraft.litany_attack": "Litany Attacks",
   "sounds.gracecraft.litany_attack_fast": "Litany Attacks faster!",
   "sounds.gracecraft.litany_attack_jumpscare": "A",
   "sounds.gracecraft.litany_attack_kill": "why did you listen?",
-
 
   "commands.gracecraft.spawnentity.playernotfound": "Player is not found",
   "commands.gracecraft.spawnentity.sendtoplayer": "Entity \"%s\" sent to player \"%s\"",

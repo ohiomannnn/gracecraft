@@ -9,11 +9,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 
-public class ModCommands {
+public class InitCommands {
+
+    /*
+     * For spawning entities
+     */
     private static final SuggestionProvider<CommandSourceStack> OVERLAY_SUGGESTIONS =
             (context, builder) -> {
                 builder.suggest("EntityDozer");
                 builder.suggest("EntityLitany");
+                builder.suggest("EntityKooKoo");
                 return builder.buildFuture();
             };
 
@@ -54,10 +59,7 @@ public class ModCommands {
         }
 
         GraceCraftNetwork.sendOverlayToClient(targetPlayer, overlayName);
-        source.sendSuccess(() -> Component.translatable("commands.gracecraft.spawnentity.sendtoplayer",
-                overlayName,
-                playerName
-        ), true);
+        source.sendSuccess(() -> Component.translatable("commands.gracecraft.spawnentity.sendtoplayer", overlayName, playerName), true);
         return 1;
     }
 }
