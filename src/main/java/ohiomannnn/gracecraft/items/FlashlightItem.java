@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,25 +43,23 @@ public class FlashlightItem extends Item {
         if (selected && !player.isSpectator()) {
             BlockPos targetPos;
 
-            HitResult hit = player.pick(8.0D, 0.0F, false);
+            HitResult hit = player.pick(8.0D, 0.0F, true);
 
             if (hit.getType() == HitResult.Type.BLOCK) {
                 BlockPos hitPos = ((BlockHitResult) hit).getBlockPos();
                 Direction face = ((BlockHitResult) hit).getDirection();
 
                 BlockPos abovePos = hitPos.above();
-                BlockPos eastPos = hitPos.east();
-                BlockPos northPos = hitPos.north();
-                BlockPos westPos = hitPos.west();
-                BlockPos southPos = hitPos.south();
 
-                if (level.getBlockState(southPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK)  && level.getBlockState(abovePos).is(Blocks.SNOW)||
-                        level.getBlockState(northPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK)   && level.getBlockState(abovePos).is(Blocks.SNOW)||
-                        level.getBlockState(westPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK)   && level.getBlockState(abovePos).is(Blocks.SNOW)||
-                        level.getBlockState(eastPos).is(Blocks.SNOW) && level.getBlockState(hitPos).is(Blocks.GRASS_BLOCK) && level.getBlockState(abovePos).is(Blocks.SNOW)) {
+                VoxelShape shape = level.getBlockState(hitPos).getShape(level, hitPos);
+                VoxelShape aboveShape = level.getBlockState(abovePos).getShape(level, abovePos);
+
+                if (!aboveShape.isEmpty() && aboveShape.bounds().getYsize() <= 0.125) {
                     targetPos = hitPos.above(2);
-                } else if (level.getBlockState(abovePos).is(Blocks.SHORT_GRASS)) {
-                    targetPos = hitPos.above(2);
+                } else if (!aboveShape.isEmpty() && aboveShape.bounds().getYsize() < 1.0) {
+                    targetPos = hitPos.relative(face,2);
+                } else if (!shape.isEmpty() && shape.bounds().getYsize() < 1.0) {
+                    targetPos = hitPos.above();
                 } else {
                     targetPos = hitPos.relative(face);
                 }

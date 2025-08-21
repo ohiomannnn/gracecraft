@@ -355,7 +355,7 @@
     },
     "firstperson_righthand": {
       "rotation": [0, 90, 0],
-      "translation": [-0.25, 9.75, -2.5]
+      "translation": [-0.25, 7.75, -2.5]
     },
     "ground": {
       "translation": [0, 5.5, 4.25]

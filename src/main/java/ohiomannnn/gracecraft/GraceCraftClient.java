@@ -3,11 +3,9 @@ package ohiomannnn.gracecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -38,8 +36,10 @@ public class GraceCraftClient {
 
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
-        if (mainHand.is(InitItems.DOOMBRINGER) || offHand.is(InitItems.DOOMBRINGER)) {
+        if (mainHand.is(InitItems.DOOMBRINGER)) {
             model.rightArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
+        } else if (offHand.is(InitItems.DOOMBRINGER)) {
+            model.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
         }
     }
     @SubscribeEvent

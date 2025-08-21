@@ -18,7 +18,6 @@ public class InitCommands {
             (context, builder) -> {
                 builder.suggest("EntityDozer");
                 builder.suggest("EntityLitany");
-                builder.suggest("EntityKooKoo");
                 return builder.buildFuture();
             };
 
