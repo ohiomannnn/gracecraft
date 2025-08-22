@@ -31,7 +31,7 @@ public final class GraceCraftClientNetwork {
             if ("EntityKooKoo".equals(msg.overlayName())) {
                 Minecraft.getInstance().setOverlay(new EntityKooKooOverlay());
             }
-            // add other overlayes (entities) here
+            // add other overlays (entities) here
         });
     }
 }
