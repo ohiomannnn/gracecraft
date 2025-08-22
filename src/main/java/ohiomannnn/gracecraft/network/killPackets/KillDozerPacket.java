@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.network;
+package ohiomannnn.gracecraft.network.killPackets;
 
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,20 +9,20 @@ import ohiomannnn.gracecraft.GraceCraft;
 
 import java.util.UUID;
 
-public record KillPacketDozer(UUID targetId) implements CustomPacketPayload {
+public record KillDozerPacket(UUID targetId) implements CustomPacketPayload {
 
-    public static final Type<KillPacketDozer> TYPE =
+    public static final Type<KillDozerPacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "kill_dozer"));
 
-    public static final StreamCodec<FriendlyByteBuf, KillPacketDozer> STREAM_CODEC =
+    public static final StreamCodec<FriendlyByteBuf, KillDozerPacket> STREAM_CODEC =
             new StreamCodec<>() {
                 @Override
-                public KillPacketDozer decode(FriendlyByteBuf buf) {
-                    return new KillPacketDozer(buf.readUUID());
+                public KillDozerPacket decode(FriendlyByteBuf buf) {
+                    return new KillDozerPacket(buf.readUUID());
                 }
 
                 @Override
-                public void encode(FriendlyByteBuf buf, KillPacketDozer msg) {
+                public void encode(FriendlyByteBuf buf, KillDozerPacket msg) {
                     buf.writeUUID(msg.targetId());
                 }
             };

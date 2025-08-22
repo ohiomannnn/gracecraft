@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.network;
+package ohiomannnn.gracecraft.network.killPackets;
 
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,20 +9,20 @@ import ohiomannnn.gracecraft.GraceCraft;
 
 import java.util.UUID;
 
-public record KillPacketLitany(UUID targetId) implements CustomPacketPayload {
+public record KillLitanyPacket(UUID targetId) implements CustomPacketPayload {
 
-    public static final Type<KillPacketLitany> TYPE =
+    public static final Type<KillLitanyPacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "kill_litany"));
 
-    public static final StreamCodec<FriendlyByteBuf, KillPacketLitany> STREAM_CODEC =
+    public static final StreamCodec<FriendlyByteBuf, KillLitanyPacket> STREAM_CODEC =
             new StreamCodec<>() {
                 @Override
-                public KillPacketLitany decode(FriendlyByteBuf buf) {
-                    return new KillPacketLitany(buf.readUUID());
+                public KillLitanyPacket decode(FriendlyByteBuf buf) {
+                    return new KillLitanyPacket(buf.readUUID());
                 }
 
                 @Override
-                public void encode(FriendlyByteBuf buf, KillPacketLitany msg) {
+                public void encode(FriendlyByteBuf buf, KillLitanyPacket msg) {
                     buf.writeUUID(msg.targetId());
                 }
             };

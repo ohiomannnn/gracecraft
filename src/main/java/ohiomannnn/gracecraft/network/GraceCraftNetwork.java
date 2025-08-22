@@ -10,6 +10,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ohiomannnn.gracecraft.GraceCraft;
+import ohiomannnn.gracecraft.network.killPackets.KillDozerPacket;
+import ohiomannnn.gracecraft.network.killPackets.KillLitanyPacket;
+import ohiomannnn.gracecraft.network.showOverlay.ShowOverlayPacket;
 
 import java.util.UUID;
 
@@ -22,18 +25,18 @@ public final class GraceCraftNetwork {
         var registrar = event.registrar(GraceCraft.MOD_ID);
 
         registrar.playToServer(
-                KillPacketDozer.TYPE,
-                KillPacketDozer.STREAM_CODEC,
+                KillDozerPacket.TYPE,
+                KillDozerPacket.STREAM_CODEC,
                 GraceCraftNetwork::handleKillDozerBound
         );
         registrar.playToServer(
-                KillPacketLitany.TYPE,
-                KillPacketLitany.STREAM_CODEC,
+                KillLitanyPacket.TYPE,
+                KillLitanyPacket.STREAM_CODEC,
                 GraceCraftNetwork::handleKillLitanyBound
         );
     }
 
-    private static void handleKillDozerBound(final KillPacketDozer msg, final IPayloadContext ctx) {
+    private static void handleKillDozerBound(final KillDozerPacket msg, final IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer sender)) return;
 
@@ -51,7 +54,7 @@ public final class GraceCraftNetwork {
             }
         });
     }
-    private static void handleKillLitanyBound(final KillPacketLitany msg, final IPayloadContext ctx) {
+    private static void handleKillLitanyBound(final KillLitanyPacket msg, final IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer sender)) return;
 
@@ -71,10 +74,10 @@ public final class GraceCraftNetwork {
     }
 
     public static void sendKillToServerWDozer(UUID target) {
-        PacketDistributor.sendToServer(new KillPacketDozer(target));
+        PacketDistributor.sendToServer(new KillDozerPacket(target));
     }
     public static void sendKillToServerWLitany(UUID target) {
-        PacketDistributor.sendToServer(new KillPacketLitany(target));
+        PacketDistributor.sendToServer(new KillLitanyPacket(target));
     }
     public static void sendOverlayToClient(ServerPlayer player, String overlayName) {
         PacketDistributor.sendToPlayer(player, new ShowOverlayPacket(overlayName));

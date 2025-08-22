@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.network;
+package ohiomannnn.gracecraft.network.showOverlay;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

@@ -11,14 +11,14 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ohiomannnn.gracecraft.blocks.InitBlocks;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozerOverlay;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitanyOverlay;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.CreativeModeTabs;
 import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.slf4j.Logger;
-
-import static ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitanyOverlay.isCrouchingLitany;
 
 @Mod(GraceCraft.MOD_ID)
 public class GraceCraft {
@@ -43,7 +43,8 @@ public class GraceCraft {
         InitCommands.register(event.getDispatcher());
     }
 
-    public static boolean isCrouching;
+    public static boolean isCrouchingLitany;
+    public static boolean isCrouchingDozer;
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.Key event) {
@@ -61,7 +62,7 @@ public class GraceCraft {
                         !mc.options.keyJump.isDown() &&
                         !mc.options.keySprint.isDown();
 
-        isCrouching = shiftDown && noOtherKeys;
+        isCrouchingDozer = shiftDown && noOtherKeys;
         isCrouchingLitany = shiftDown;
     }
 }

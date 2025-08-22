@@ -7,6 +7,7 @@ import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozerOverlay;
 import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityKooKooOverlay;
 import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitanyOverlay;
+import ohiomannnn.gracecraft.network.showOverlay.ShowOverlayPacket;
 
 public final class GraceCraftClientNetwork {
     public static void registerClientPayloads(RegisterPayloadHandlersEvent event) {

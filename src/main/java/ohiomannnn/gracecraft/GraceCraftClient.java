@@ -42,6 +42,4 @@ public class GraceCraftClient {
             model.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
         }
     }
-    @SubscribeEvent
-    static void onClientSetup(FMLClientSetupEvent event) {}
 }

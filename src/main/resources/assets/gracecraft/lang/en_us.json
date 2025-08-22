@@ -21,5 +21,6 @@
   "commands.gracecraft.spawnentity.noAccess": "You do not have permission to execute this command.",
 
   "death.attack.dozer_attack": "%s was killed by Dozer",
+  "death.attack.kookoo_attack": "%s was killed by Kookoo",
   "death.attack.litany_attack": "%s was killed by Litany"
 }

@@ -77,7 +77,7 @@ public class EntityDozerOverlay extends Overlay {
             soundPlayed = false;
         }
 
-        if (gameTicks >= (TO_CLOSE_TICKS - OPEN_WITH_KILL) && !GraceCraft.isCrouching) {
+        if (gameTicks >= (TO_CLOSE_TICKS - OPEN_WITH_KILL) && !GraceCraft.isCrouchingDozer) {
             playSoundEntity(Minecraft.getInstance().player, 2);
             killByUuid(Minecraft.getInstance().player.getUUID());
             Minecraft.getInstance().setOverlay(new DozerKillOverlay());

@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import static ohiomannnn.gracecraft.GraceCraft.isCrouchingLitany;
+
 
 public class EntityLitanyOverlay extends Overlay {
     public enum EyeStage {
@@ -57,8 +59,6 @@ public class EntityLitanyOverlay extends Overlay {
     private static int SHAKE_AMPLITUDE = 2;
 
     private static int statePlayed = 1;
-
-    public static boolean isCrouchingLitany;
 
     private void playSoundEntity(Player player, int audio) {
         if (audio == 1) {
