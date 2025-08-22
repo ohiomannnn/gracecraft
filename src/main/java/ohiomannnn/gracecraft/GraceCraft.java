@@ -30,7 +30,7 @@ public class GraceCraft {
         modEventBus.addListener(GraceCraftNetwork::registerPayloads);
 
         InitItems.register(modEventBus);
-        InitBlocks.register(modEventBus);
+//        InitBlocks.register(modEventBus);
         InitSounds.register(modEventBus);
         CreativeModeTabs.register(modEventBus);
 
