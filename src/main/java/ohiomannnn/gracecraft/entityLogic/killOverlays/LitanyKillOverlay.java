@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitanyOverlay;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitany;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class LitanyKillOverlay extends Overlay {
 
     private final net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create();
 
-    private static final ResourceLocation TEX =
+    private static final ResourceLocation BASE =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_kill.png");
 
     @Override
@@ -61,7 +61,7 @@ public class LitanyKillOverlay extends Overlay {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
-        guiGraphics.blit(TEX, EntityLitanyOverlay.baseX, EntityLitanyOverlay.baseY,
+        guiGraphics.blit(BASE, EntityLitany.baseX, EntityLitany.baseY,
                 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         // 1) ~1.3 s
@@ -94,14 +94,15 @@ public class LitanyKillOverlay extends Overlay {
             for (int i = 0; i < perTick; i++) {
                 float sx = randScaleWidth();
                 float sy = randScaleHeight();
-                int x = random.nextInt(Math.max(1, screenWidth)) + 10;
-                int y = random.nextInt(Math.max(1, screenHeight)) + 10;
+                int x = random.nextInt(Math.max(1, screenWidth));
+                int y = random.nextInt(Math.max(1, screenHeight));
                 messages.add(new TextEntry("why did you listen?", x, y, sx, sy));
             }
         }
 
         if (gameTicks >= AUTO_CLOSE_TICKS) {
             mc.setOverlay(null);
+            EntityLitany.endOthersFromLitany = false;
         }
 
         PoseStack poseStack = guiGraphics.pose();

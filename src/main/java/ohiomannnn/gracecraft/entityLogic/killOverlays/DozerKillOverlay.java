@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class DozerKillOverlay extends Overlay {
 
         if (gameTicks >= TO_CLOSE_TICKS) {
             mc.setOverlay(null);
+            EntityDozer.endOthersFromDozer = false;
         }
 
         if (!firstMessageShown && gameTicks <= 8) {

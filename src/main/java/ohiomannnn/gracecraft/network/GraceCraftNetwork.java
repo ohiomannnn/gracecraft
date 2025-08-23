@@ -12,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.network.killPackets.KillDozerPacket;
 import ohiomannnn.gracecraft.network.killPackets.KillLitanyPacket;
-import ohiomannnn.gracecraft.network.showOverlay.ShowOverlayPacket;
+import ohiomannnn.gracecraft.network.showOverlay.ShowEntityPacket;
 
 import java.util.UUID;
 
@@ -79,7 +79,7 @@ public final class GraceCraftNetwork {
     public static void sendKillToServerWLitany(UUID target) {
         PacketDistributor.sendToServer(new KillLitanyPacket(target));
     }
-    public static void sendOverlayToClient(ServerPlayer player, String overlayName) {
-        PacketDistributor.sendToPlayer(player, new ShowOverlayPacket(overlayName));
+    public static void sendEntityToClient(ServerPlayer player, String overlayName) {
+        PacketDistributor.sendToPlayer(player, new ShowEntityPacket(overlayName));
     }
 }

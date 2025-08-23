@@ -10,6 +10,9 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import ohiomannnn.gracecraft.blocks.InitBlocks;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozer;
+import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.CreativeModeTabs;
 import ohiomannnn.gracecraft.misc.InitCommands;
@@ -25,9 +28,11 @@ public class GraceCraft {
     public GraceCraft(IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(GraceCraftNetwork::registerPayloads);
+        modEventBus.addListener(EntityDozer::onRegisterGuiLayers);
+        modEventBus.addListener(EntityLitany::onRegisterGuiLayers);
 
         InitItems.register(modEventBus);
-//        InitBlocks.register(modEventBus);
+        InitBlocks.register(modEventBus);
         InitSounds.register(modEventBus);
         CreativeModeTabs.register(modEventBus);
 
@@ -37,7 +42,7 @@ public class GraceCraft {
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
-        InitCommands.register(event.getDispatcher());
+        InitCommands.registerCommandSpawnEntity(event.getDispatcher());
     }
 
     public static boolean isCrouchingLitany;
