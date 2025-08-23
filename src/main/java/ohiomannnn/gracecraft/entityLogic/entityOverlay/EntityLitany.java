@@ -70,7 +70,7 @@ public class EntityLitany {
         texture = BASE;
     }
 
-    public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
+    public static void RegisterGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.parse("entity_litany"), (guiGraphics, partialTick) -> {
             if (!active) return;
 

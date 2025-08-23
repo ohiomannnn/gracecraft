@@ -28,8 +28,8 @@ public class GraceCraft {
     public GraceCraft(IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(GraceCraftNetwork::registerPayloads);
-        modEventBus.addListener(EntityDozer::onRegisterGuiLayers);
-        modEventBus.addListener(EntityLitany::onRegisterGuiLayers);
+        modEventBus.addListener(EntityDozer::RegisterGuiLayers);
+        modEventBus.addListener(EntityLitany::RegisterGuiLayers);
 
         InitItems.register(modEventBus);
         InitBlocks.register(modEventBus);

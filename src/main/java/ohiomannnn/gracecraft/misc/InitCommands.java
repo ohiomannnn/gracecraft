@@ -26,7 +26,7 @@ public class InitCommands {
     public static void registerCommandSpawnEntity(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 Commands.literal("spawnentity")
-                        .then(Commands.argument("hudName", StringArgumentType.string())
+                        .then(Commands.argument("entityName", StringArgumentType.string())
                                 .suggests(ENTITY_SUGGESTIONS)
                                 .then(Commands.argument("playerName", StringArgumentType.string())
                                         .suggests(PLAYER_SUGGESTIONS)
@@ -37,21 +37,21 @@ public class InitCommands {
                                                         "commands.gracecraft.spawnentity.noAccess"));
                                                 return 0;
                                             }
-                                            String hudName = StringArgumentType.getString(context, "hudName");
+                                            String entityName = StringArgumentType.getString(context, "entityName");
                                             String playerName = StringArgumentType.getString(context, "playerName");
-                                            return executeSpawnEntity(context.getSource(), hudName, playerName);
+                                            return executeSpawnEntity(context.getSource(), entityName, playerName);
                                         })))
         );
     }
 
-    private static int executeSpawnEntity(CommandSourceStack source, String hudName, String playerName) {
+    private static int executeSpawnEntity(CommandSourceStack source, String entityName, String playerName) {
         ServerPlayer targetPlayer = source.getServer().getPlayerList().getPlayerByName(playerName);
         if (targetPlayer == null) {
             source.sendFailure(Component.translatable("commands.gracecraft.spawnentity.playernotfound"));
             return 0;
         }
-        GraceCraftNetwork.sendEntityToClient(targetPlayer, hudName);
-        source.sendSuccess(() -> Component.translatable("commands.gracecraft.spawnentity.sendtoplayer", hudName, playerName), true);
+        GraceCraftNetwork.sendEntityToClient(targetPlayer, entityName);
+        source.sendSuccess(() -> Component.translatable("commands.gracecraft.spawnentity.sendtoplayer", entityName, playerName), true);
         return 1;
     }
 }

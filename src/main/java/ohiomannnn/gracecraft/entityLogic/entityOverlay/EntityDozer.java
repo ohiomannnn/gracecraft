@@ -35,7 +35,7 @@ public class EntityDozer {
         soundPlayed = false;
     }
 
-    public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
+    public static void RegisterGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.parse("entity_dozer"), (guiGraphics, partialTick) -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.level == null || startTick < 0) return;
