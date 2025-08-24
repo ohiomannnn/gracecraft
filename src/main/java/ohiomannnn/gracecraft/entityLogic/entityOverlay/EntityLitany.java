@@ -18,8 +18,12 @@ import static ohiomannnn.gracecraft.GraceCraft.isCrouchingLitany;
 
 public class EntityLitany {
 
-    public enum EyeStage { OPENING, OPEN }
-    public enum EyePosition { LEFT, CENTER, RIGHT }
+    public enum EyeStage {
+        OPENING, OPEN
+    }
+    public enum EyePosition {
+        LEFT, CENTER, RIGHT
+    }
 
     private static final Map<EyePosition, Map<EyeStage, ResourceLocation>> EYE_TEXTURES = new HashMap<>();
     private static final ResourceLocation BASE =
@@ -56,8 +60,8 @@ public class EntityLitany {
     private static ResourceLocation texture = BASE;
     private static final Random rng = new Random();
 
-    public static int baseX;
-    public static int baseY;
+    public static int LitanyBaseX;
+    public static int LitanyBaseY;
 
     public static boolean endOthersFromLitany = false;
 
@@ -135,8 +139,8 @@ public class EntityLitany {
                 }
             }
 
-            int shakeX = baseX + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
-            int shakeY = baseY + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
+            int shakeX = LitanyBaseX + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
+            int shakeY = LitanyBaseY + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
 
             guiGraphics.blit(texture, shakeX, shakeY, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
@@ -157,8 +161,8 @@ public class EntityLitany {
         int h = mc.getWindow().getGuiScaledHeight();
         int maxX = Math.max(0, w - IMAGE_WIDTH);
         int maxY = Math.max(0, h - IMAGE_HEIGHT);
-        baseX = (maxX > 0) ? rng.nextInt(maxX + 1) : 0;
-        baseY = (maxY > 0) ? rng.nextInt(maxY + 1) : 0;
+        LitanyBaseX = (maxX > 0) ? rng.nextInt(maxX + 1) : 0;
+        LitanyBaseY = (maxY > 0) ? rng.nextInt(maxY + 1) : 0;
     }
 
     private static void playSoundEntity(Player player, int audio) {

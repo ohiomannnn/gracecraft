@@ -61,7 +61,7 @@ public class LitanyKillOverlay extends Overlay {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
-        guiGraphics.blit(BASE, EntityLitany.baseX, EntityLitany.baseY,
+        guiGraphics.blit(BASE, EntityLitany.LitanyBaseX, EntityLitany.LitanyBaseY,
                 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         // 1) ~1.3 s
