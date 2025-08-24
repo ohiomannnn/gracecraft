@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.items;
+package ohiomannnn.gracecraft.items.flashlight;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

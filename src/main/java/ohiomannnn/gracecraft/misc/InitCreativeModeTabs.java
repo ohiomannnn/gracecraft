@@ -11,7 +11,7 @@ import ohiomannnn.gracecraft.items.InitItems;
 
 import java.util.function.Supplier;
 
-public class CreativeModeTabs {
+public class InitCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MOD_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, GraceCraft.MOD_ID);
 
     public static final Supplier<CreativeModeTab> GRACE_ITEMS_TAB = CREATIVE_MOD_TAB.register("grace_items_tab", () -> CreativeModeTab.builder()

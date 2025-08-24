@@ -98,6 +98,7 @@ public class EntityLitany {
             if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS_W_KILL) {
                 if (!isCrouchingLitany) {
                     playSoundEntity(player, 4);
+                    assert player != null;
                     GraceCraftNetwork.sendKillToServerWLitany(player.getUUID());
                     mc.setOverlay(new LitanyKillOverlay());
                     active = false;

@@ -1,10 +1,11 @@
-package ohiomannnn.gracecraft.network.showOverlay;
+package ohiomannnn.gracecraft.network.showEntity;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
+import org.jetbrains.annotations.NotNull;
 
 public record ShowEntityPacket(String entityName) implements CustomPacketPayload {
 
@@ -14,7 +15,7 @@ public record ShowEntityPacket(String entityName) implements CustomPacketPayload
     public static final StreamCodec<FriendlyByteBuf, ShowEntityPacket> STREAM_CODEC =
             new StreamCodec<>() {
                 @Override
-                public ShowEntityPacket decode(FriendlyByteBuf buf) {
+                public @NotNull ShowEntityPacket decode(FriendlyByteBuf buf) {
                     return new ShowEntityPacket(buf.readUtf());
                 }
 
@@ -25,7 +26,7 @@ public record ShowEntityPacket(String entityName) implements CustomPacketPayload
             };
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
+    public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

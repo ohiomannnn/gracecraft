@@ -31,6 +31,7 @@ public class EntityDozer {
     public static boolean endOthersFromDozer = false;
 
     public static void start() {
+        assert Minecraft.getInstance().level != null;
         startTick = Minecraft.getInstance().level.getGameTime();
         soundPlayed = false;
     }
@@ -68,6 +69,7 @@ public class EntityDozer {
 
             if (gameTicks >= (DURATION_TICKS - OPEN_W_KILL) && !GraceCraft.isCrouchingDozer) {
                 playSoundEntity(mc.player, 2);
+                assert mc.player != null;
                 killByUuid(mc.player.getUUID());
                 mc.setOverlay(new DozerKillOverlay());
                 startTick = -1;

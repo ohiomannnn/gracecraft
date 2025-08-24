@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
@@ -14,7 +15,7 @@ import ohiomannnn.gracecraft.blocks.InitBlocks;
 import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozer;
 import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
-import ohiomannnn.gracecraft.misc.CreativeModeTabs;
+import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
 import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
@@ -25,7 +26,7 @@ public class GraceCraft {
     public static final String MOD_ID = "gracecraft";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public GraceCraft(IEventBus modEventBus) {
+    public GraceCraft(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(GraceCraftNetwork::registerPayloads);
         modEventBus.addListener(EntityDozer::RegisterGuiLayers);
@@ -34,7 +35,7 @@ public class GraceCraft {
         InitItems.register(modEventBus);
         InitBlocks.register(modEventBus);
         InitSounds.register(modEventBus);
-        CreativeModeTabs.register(modEventBus);
+        InitCreativeModeTabs.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
     }

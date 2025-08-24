@@ -12,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.network.killPackets.KillDozerPacket;
 import ohiomannnn.gracecraft.network.killPackets.KillLitanyPacket;
-import ohiomannnn.gracecraft.network.showOverlay.ShowEntityPacket;
+import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 import java.util.UUID;
 

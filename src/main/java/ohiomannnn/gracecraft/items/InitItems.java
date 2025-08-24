@@ -6,6 +6,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import ohiomannnn.gracecraft.GraceCraft;
+import ohiomannnn.gracecraft.items.doombringer.DoombringerItem;
+import ohiomannnn.gracecraft.items.flashlight.FlashlightItem;
 
 public class InitItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(GraceCraft.MOD_ID);

@@ -6,6 +6,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public record KillDozerPacket(UUID targetId) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, KillDozerPacket> STREAM_CODEC =
             new StreamCodec<>() {
                 @Override
-                public KillDozerPacket decode(FriendlyByteBuf buf) {
+                public @NotNull KillDozerPacket decode(FriendlyByteBuf buf) {
                     return new KillDozerPacket(buf.readUUID());
                 }
 
@@ -28,7 +29,7 @@ public record KillDozerPacket(UUID targetId) implements CustomPacketPayload {
             };
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
+    public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }
