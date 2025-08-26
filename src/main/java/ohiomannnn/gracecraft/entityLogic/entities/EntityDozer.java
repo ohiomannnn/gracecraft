@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.entityLogic.entityOverlay;
+package ohiomannnn.gracecraft.entityLogic.entities;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -13,14 +13,14 @@ import java.util.Random;
 import java.util.UUID;
 
 public class EntityDozer {
-    private static final ResourceLocation TEXTURE_START =
+    private static final ResourceLocation DOZER_SLEEP =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer.png");
-    private static final ResourceLocation TEXTURE_END =
+    private static final ResourceLocation DOZER_AWAKE =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer_awake.png");
 
     private static final int DURATION_TICKS = 35;
-    private static final int OPEN_W_NO_KILL = 5;
-    private static final int OPEN_W_KILL = 2;
+    private static final int AWAKE_W_NO_KILL = 5;
+    private static final int AWAKE_W_KILL = 2;
     private static final int IMAGE_WIDTH = 128;
     private static final int IMAGE_HEIGHT = 128;
 
@@ -48,8 +48,8 @@ public class EntityDozer {
             int x = (screenWidth - IMAGE_WIDTH) / 2 + rng.nextInt(2);
             int y = (screenHeight - IMAGE_HEIGHT) / 2 + rng.nextInt(2);
 
-            boolean showEnd = gameTicks >= (DURATION_TICKS - OPEN_W_NO_KILL);
-            ResourceLocation texture = showEnd ? TEXTURE_END : TEXTURE_START;
+            boolean showEnd = gameTicks >= (DURATION_TICKS - AWAKE_W_NO_KILL);
+            ResourceLocation texture = showEnd ? DOZER_AWAKE : DOZER_SLEEP;
 
             guiGraphics.blit(texture, x, y, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
@@ -67,7 +67,7 @@ public class EntityDozer {
                 soundPlayed = false;
             }
 
-            if (gameTicks >= (DURATION_TICKS - OPEN_W_KILL) && !GraceCraft.isCrouchingDozer) {
+            if (gameTicks >= (DURATION_TICKS - AWAKE_W_KILL) && !GraceCraft.isCrouchingDozer) {
                 playSoundEntity(mc.player, 2);
                 assert mc.player != null;
                 killByUuid(mc.player.getUUID());

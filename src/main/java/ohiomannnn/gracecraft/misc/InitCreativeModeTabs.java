@@ -1,9 +1,12 @@
 package ohiomannnn.gracecraft.misc;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import ohiomannnn.gracecraft.GraceCraft;
@@ -19,7 +22,18 @@ public class InitCreativeModeTabs {
             .title(Component.translatable("creative." + GraceCraft.MOD_ID + ".grace_items_tab"))
             .displayItems((itemDisplayParameters, output) -> {
                 output.accept(InitItems.FLASHLIGHT);
-                output.accept(InitItems.DOOMBRINGER);
+
+                ItemStack doomFriendly = new ItemStack(InitItems.DOOMBRINGER.get());
+                CompoundTag friendlyTrue = new CompoundTag();
+                friendlyTrue.putBoolean("Friendly", true);
+                doomFriendly.set(DataComponents.CUSTOM_DATA, CustomData.of(friendlyTrue));
+                output.accept(doomFriendly);
+
+                ItemStack doomNotFriendly = new ItemStack(InitItems.DOOMBRINGER.get());
+                CompoundTag friendlyFalse = new CompoundTag();
+                friendlyFalse.putBoolean("Friendly", false);
+                doomNotFriendly.set(DataComponents.CUSTOM_DATA, CustomData.of(friendlyFalse));
+                output.accept(doomNotFriendly);
             })
             .build());
 

@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.entityLogic.entityOverlay;
+package ohiomannnn.gracecraft.entityLogic.entities;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -26,7 +26,7 @@ public class EntityLitany {
     }
 
     private static final Map<EyePosition, Map<EyeStage, ResourceLocation>> EYE_TEXTURES = new HashMap<>();
-    private static final ResourceLocation BASE =
+    private static final ResourceLocation LITANY =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany.png");
 
     static {
@@ -57,7 +57,7 @@ public class EntityLitany {
     private static int cyclesDone = 0;
     private static int statePlayed = 1;
     private static int SHAKE_AMPLITUDE = 2;
-    private static ResourceLocation texture = BASE;
+    private static ResourceLocation texture = LITANY;
     private static final Random rng = new Random();
 
     public static int LitanyBaseX;
@@ -71,7 +71,7 @@ public class EntityLitany {
         cyclesDone = 0;
         statePlayed = 1;
         SHAKE_AMPLITUDE = 2;
-        texture = BASE;
+        texture = LITANY;
     }
 
     public static void RegisterGuiLayers(RegisterGuiLayersEvent event) {
@@ -113,7 +113,7 @@ public class EntityLitany {
                     case 0 -> EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPEN);
                     case 1 -> EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPEN);
                     case 2 -> EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPEN);
-                    default -> BASE;
+                    default -> LITANY;
                 };
                 if (statePlayed == 3) {
                     playSoundEntity(player, 3);
@@ -125,7 +125,7 @@ public class EntityLitany {
                     case 0 -> EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPENING);
                     case 1 -> EYE_TEXTURES.get(EyePosition.LEFT).get(EyeStage.OPENING);
                     case 2 -> EYE_TEXTURES.get(EyePosition.RIGHT).get(EyeStage.OPENING);
-                    default -> BASE;
+                    default -> LITANY;
                 };
                 if (statePlayed == 2) {
                     playSoundEntity(player, 2);
@@ -133,7 +133,7 @@ public class EntityLitany {
                 }
             } else {
                 SHAKE_AMPLITUDE = 2;
-                texture = BASE;
+                texture = LITANY;
                 if (statePlayed == 1) {
                     playSoundEntity(player, 1);
                     statePlayed = 2;

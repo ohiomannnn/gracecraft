@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.renderer.GeoRenderer;
 
 public class DoombringerModel extends GeoModel<DoombringerItem> {
+
     @Override
     public ResourceLocation getModelResource(DoombringerItem animatable, GeoRenderer<DoombringerItem> renderer) {
         return ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "geo/doombringer.geo.json");

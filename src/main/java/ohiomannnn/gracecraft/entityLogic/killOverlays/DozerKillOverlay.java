@@ -7,14 +7,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozer;
+import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DozerKillOverlay extends Overlay {
-    private static final ResourceLocation TEXTURE =
+    private static final ResourceLocation DOZER_KILL =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer_kill.png");
 
     private final List<TextEntry> messages = new ArrayList<>();
@@ -51,7 +51,7 @@ public class DozerKillOverlay extends Overlay {
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
 
-        guiGraphics.blit(TEXTURE, ximg, yimg, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+        guiGraphics.blit(DOZER_KILL, ximg, yimg, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         if (gameTicks >= TO_CLOSE_TICKS) {
             mc.setOverlay(null);
@@ -84,7 +84,6 @@ public class DozerKillOverlay extends Overlay {
                     0xFFFFFF, false
             );
         }
-
         poseStack.popPose();
     }
 

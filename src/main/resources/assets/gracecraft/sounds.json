@@ -15,6 +15,14 @@
       }
     ]
   },
+  "joey_scream": {
+    "subtitle": "sounds.gracecraft.joey_scream",
+    "sounds": [
+      {
+        "name": "gracecraft:joey_scream"
+      }
+    ]
+  },
   "dozy_attack": {
     "subtitle": "sounds.gracecraft.dozy_attack",
     "sounds": [

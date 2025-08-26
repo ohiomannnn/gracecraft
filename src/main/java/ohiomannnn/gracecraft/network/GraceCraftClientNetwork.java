@@ -3,8 +3,8 @@ package ohiomannnn.gracecraft.network;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityDozer;
-import ohiomannnn.gracecraft.entityLogic.entityOverlay.EntityLitany;
+import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
+import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 public final class GraceCraftClientNetwork {
