@@ -3,23 +3,18 @@ package ohiomannnn.gracecraft;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import ohiomannnn.gracecraft.blocks.InitBlocks;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
-import ohiomannnn.gracecraft.items.doombringer.DoombringerItem;
-import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
 import ohiomannnn.gracecraft.misc.InitCommands;
+import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.slf4j.Logger;
@@ -67,18 +62,5 @@ public class GraceCraft {
 
         isCrouchingDozer = shiftDown && noOtherKeys;
         isCrouchingLitany = shiftDown;
-    }
-    @SubscribeEvent
-    public void onDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            if (event.getSource().is(DamageTypes.EXPLOSION)) {
-                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-                    ItemStack stack = player.getInventory().getItem(i);
-                    if (stack.getItem() instanceof DoombringerItem) {
-                        player.getInventory().setItem(i, ItemStack.EMPTY);
-                    }
-                }
-            }
-        }
     }
 }

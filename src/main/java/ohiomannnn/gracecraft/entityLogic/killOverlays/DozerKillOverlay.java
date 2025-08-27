@@ -45,13 +45,12 @@ public class DozerKillOverlay extends Overlay {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
-        int ximg = (screenWidth - IMAGE_WIDTH) / 2;
-        int yimg = (screenHeight - IMAGE_HEIGHT) / 2;
-
+        int x = (screenWidth - IMAGE_WIDTH) / 2;
+        int y = (screenHeight - IMAGE_HEIGHT) / 2;
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
 
-        guiGraphics.blit(DOZER_KILL, ximg, yimg, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+        guiGraphics.blit(DOZER_KILL, x, y, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         if (gameTicks >= TO_CLOSE_TICKS) {
             mc.setOverlay(null);
@@ -63,7 +62,7 @@ public class DozerKillOverlay extends Overlay {
             firstMessageShown = true;
         }
 
-        if (firstMessageShown && gameTicks >= 9) {
+        if (firstMessageShown && gameTicks >= 10) {
             TextEntry last = messages.getLast();
             messages.add(new TextEntry(
                     "will you wake up tomorrow?",
@@ -81,7 +80,8 @@ public class DozerKillOverlay extends Overlay {
                     entry.text,
                     (int)(entry.x / 4.0f),
                     (int)(entry.y / 8.0f),
-                    0xFFFFFF, false
+                    0xFFFFFF,
+                    false
             );
         }
         poseStack.popPose();

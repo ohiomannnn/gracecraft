@@ -42,9 +42,9 @@ public class EntityDozer {
             if (mc.level == null || startTick < 0) return;
 
             long gameTicks = mc.level.getGameTime() - startTick;
+
             int screenWidth = mc.getWindow().getGuiScaledWidth();
             int screenHeight = mc.getWindow().getGuiScaledHeight();
-
             int x = (screenWidth - IMAGE_WIDTH) / 2 + rng.nextInt(2);
             int y = (screenHeight - IMAGE_HEIGHT) / 2 + rng.nextInt(2);
 

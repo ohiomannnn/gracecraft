@@ -7,14 +7,6 @@
       }
     ]
   },
-  "doombringer_squeak": {
-    "subtitle": "sounds.gracecraft.doombringer_squeak",
-    "sounds": [
-      {
-        "name": "gracecraft:doombringer_squeak"
-      }
-    ]
-  },
   "joey_scream": {
     "subtitle": "sounds.gracecraft.joey_scream",
     "sounds": [
