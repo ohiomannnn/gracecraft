@@ -1,7 +1,7 @@
 package ohiomannnn.gracecraft.items.doombringer;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -29,45 +29,34 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class DoombringerItem extends Item implements GeoItem {
-    private static final RawAnimation ANIMATION_PAT = RawAnimation.begin().thenPlay("animation.model.pat");
+    private static final RawAnimation ANIMATION_PAT   = RawAnimation.begin().thenPlay("animation.model.pat");
     private static final RawAnimation ANIMATION_SCREAM = RawAnimation.begin().thenPlay("animation.model.scream");
-    private static final RawAnimation ANIMATION_SHUT = RawAnimation.begin().thenPlay("animation.model.shut");
+    private static final RawAnimation ANIMATION_SHUT  = RawAnimation.begin().thenPlay("animation.model.shut");
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    private static final int TO_SCREAM = 200;
-    private static final int TO_EXPLOSION = 315;
+    private static final int TO_SCREAM = 250;
+    private static final int TO_EXPLOSION = 365;
+
     private static long StartTick = -1;
     private static boolean canShut = false;
     private static boolean soundPlayed = false;
-
-    private static void stopSound(ServerPlayer player, ResourceLocation sound, SoundSource source) {
-        player.connection.send(new ClientboundStopSoundPacket(sound, source));
-    }
-    private boolean isFriendly(ItemStack stack) {
-        CustomData custom = stack.get(DataComponents.CUSTOM_DATA);
-        boolean friendly = false;
-        if (custom != null) {
-            CompoundTag tag = custom.copyTag();
-            if (tag.contains("Friendly")) {
-                friendly = tag.getBoolean("Friendly");
-            }
-        }
-        return friendly;
-    }
 
     public DoombringerItem(Properties properties) {
         super(properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
+
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
@@ -77,11 +66,11 @@ public class DoombringerItem extends Item implements GeoItem {
             public BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
                 if (this.renderer == null)
                     this.renderer = new DoombringerRenderer();
-
                 return this.renderer;
             }
         });
     }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main_controller", 0, state -> PlayState.STOP)
@@ -89,34 +78,59 @@ public class DoombringerItem extends Item implements GeoItem {
                 .triggerableAnim("anim_scream", ANIMATION_SCREAM)
                 .triggerableAnim("anim_shut", ANIMATION_SHUT));
     }
+
+    private boolean isFriendly(ItemStack stack) {
+        CustomData custom = stack.get(DataComponents.CUSTOM_DATA);
+        if (custom != null) {
+            CompoundTag tag = custom.copyTag();
+            if (tag.contains("Friendly")) {
+                return tag.getBoolean("Friendly");
+            }
+        }
+        return false;
+    }
+
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if (level instanceof ServerLevel serverLevel) {
-            long id = GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel);
             ItemStack stack = player.getItemInHand(hand);
 
+            Long id = GeoItem.getId(stack);
+
+            if (id == null) {
+                id = GeoItem.getOrAssignId(stack, serverLevel);
+            }
+
             if (canShut) {
-                if (!(isFriendly(stack))) {
+                if (!isFriendly(stack)) {
                     triggerAnim(player, id, "main_controller", "anim_shut");
                     canShut = false;
                     StartTick = -1;
-                    stopSound(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerList().getPlayer(Minecraft.getInstance().player.getUUID())), ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"), SoundSource.PLAYERS);
+
+                    for (ServerPlayer sp : serverLevel.players()) {
+                        sp.connection.send(new ClientboundStopSoundPacket(
+                                ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"),
+                                SoundSource.PLAYERS
+                        ));
+                    }
                 } else {
                     triggerAnim(player, id, "main_controller", "anim_pat");
                 }
             } else {
                 triggerAnim(player, id, "main_controller", "anim_pat");
-                if (!(isFriendly(stack))) {
+                if (!isFriendly(stack)) {
                     StartTick = -1;
                 }
             }
         }
         return super.use(level, player, hand);
     }
+
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
-        if (isFriendly(stack)) return;
         if (!(entity instanceof Player player)) return;
+        if (level instanceof ClientLevel) return;
+        if (isFriendly(stack)) return;
 
         if (StartTick == -1) {
             StartTick = level.getGameTime();
@@ -128,14 +142,26 @@ public class DoombringerItem extends Item implements GeoItem {
         if (gameTicks == TO_SCREAM) {
             if (level instanceof ServerLevel serverLevel) {
                 if (!soundPlayed) {
-                    serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
-                    soundPlayed = true;
+                    if (selected) {
+                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
+                                InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
+                        soundPlayed = true;
+                    } else {
+                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
+                                InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS,
+                                0.5f, 1.0f);
+                        soundPlayed = true;
+                    }
                 }
-                long id = GeoItem.getOrAssignId(stack, serverLevel);
-                triggerAnim(player, id, "main_controller", "anim_scream");
-                canShut = true;
+
+                Long id = GeoItem.getId(stack);
+                if (id != null) {
+                    triggerAnim(player, id, "main_controller", "anim_scream");
+                    canShut = true;
+                }
             }
         }
+
         if (gameTicks >= TO_EXPLOSION) {
             StartTick = -1;
 
@@ -164,6 +190,8 @@ public class DoombringerItem extends Item implements GeoItem {
 
         super.inventoryTick(stack, level, entity, slot, selected);
     }
+
+
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (isFriendly(stack)) {
@@ -174,9 +202,11 @@ public class DoombringerItem extends Item implements GeoItem {
                     .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         }
     }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
 }
+
 
