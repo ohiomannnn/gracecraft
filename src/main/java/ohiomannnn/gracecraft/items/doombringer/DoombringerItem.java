@@ -91,42 +91,6 @@ public class DoombringerItem extends Item implements GeoItem {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        if (level instanceof ServerLevel serverLevel) {
-            ItemStack stack = player.getItemInHand(hand);
-
-            Long id = GeoItem.getId(stack);
-
-            if (id == null) {
-                id = GeoItem.getOrAssignId(stack, serverLevel);
-            }
-
-            if (canShut) {
-                if (!isFriendly(stack)) {
-                    triggerAnim(player, id, "main_controller", "anim_shut");
-                    canShut = false;
-                    StartTick = -1;
-
-                    for (ServerPlayer sp : serverLevel.players()) {
-                        sp.connection.send(new ClientboundStopSoundPacket(
-                                ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"),
-                                SoundSource.PLAYERS
-                        ));
-                    }
-                } else {
-                    triggerAnim(player, id, "main_controller", "anim_pat");
-                }
-            } else {
-                triggerAnim(player, id, "main_controller", "anim_pat");
-                if (!isFriendly(stack)) {
-                    StartTick = -1;
-                }
-            }
-        }
-        return super.use(level, player, hand);
-    }
-
-    @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
         if (!(entity instanceof Player player)) return;
         if (level instanceof ClientLevel) return;
@@ -191,6 +155,41 @@ public class DoombringerItem extends Item implements GeoItem {
         super.inventoryTick(stack, level, entity, slot, selected);
     }
 
+    @Override
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+        if (level instanceof ServerLevel serverLevel) {
+            ItemStack stack = player.getItemInHand(hand);
+
+            Long id = GeoItem.getId(stack);
+
+            if (id == null) {
+                id = GeoItem.getOrAssignId(stack, serverLevel);
+            }
+
+            if (canShut) {
+                if (!isFriendly(stack)) {
+                    triggerAnim(player, id, "main_controller", "anim_shut");
+                    canShut = false;
+                    StartTick = -1;
+
+                    for (ServerPlayer sp : serverLevel.players()) {
+                        sp.connection.send(new ClientboundStopSoundPacket(
+                                ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"),
+                                SoundSource.PLAYERS
+                        ));
+                    }
+                } else {
+                    triggerAnim(player, id, "main_controller", "anim_pat");
+                }
+            } else {
+                triggerAnim(player, id, "main_controller", "anim_pat");
+                if (!isFriendly(stack)) {
+                    StartTick = -1;
+                }
+            }
+        }
+        return super.use(level, player, hand);
+    }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
