@@ -12,6 +12,8 @@ import ohiomannnn.gracecraft.sounds.InitSounds;
 import java.util.Random;
 import java.util.UUID;
 
+import static ohiomannnn.gracecraft.GraceCraft.isCrouchingDozer;
+
 public class EntityDozer {
     private static final ResourceLocation DOZER_SLEEP =
             ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_dozer.png");
@@ -67,7 +69,7 @@ public class EntityDozer {
                 soundPlayed = false;
             }
 
-            if (gameTicks >= (DURATION_TICKS - AWAKE_W_KILL) && !GraceCraft.isCrouchingDozer) {
+            if (gameTicks >= (DURATION_TICKS - AWAKE_W_KILL) && !isCrouchingDozer) {
                 playSoundEntity(mc.player, 2);
                 assert mc.player != null;
                 killByUuid(mc.player.getUUID());

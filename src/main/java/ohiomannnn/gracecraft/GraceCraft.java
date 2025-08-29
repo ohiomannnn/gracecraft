@@ -1,6 +1,5 @@
 package ohiomannnn.gracecraft;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.neoforged.bus.api.IEventBus;
@@ -10,24 +9,21 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ohiomannnn.gracecraft.blocks.InitBlocks;
-import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
-import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mod(GraceCraft.MOD_ID)
 public class GraceCraft {
     public static final String MOD_ID = "gracecraft";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LoggerFactory.getLogger("GraceCraft");
 
     public GraceCraft(IEventBus modEventBus) {
         modEventBus.addListener(GraceCraftNetwork::registerPayloads);
-        modEventBus.addListener(EntityDozer::RegisterGuiLayers);
-        modEventBus.addListener(EntityLitany::RegisterGuiLayers);
 
         InitItems.register(modEventBus);
         InitBlocks.register(modEventBus);
@@ -43,7 +39,6 @@ public class GraceCraft {
 
     public static boolean isCrouchingLitany;
     public static boolean isCrouchingDozer;
-
     @SubscribeEvent
     public void onKeyInput(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();

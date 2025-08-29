@@ -1,80 +1,37 @@
 {
-	"format_version": "1.21.6",
-	"credit": "Made with Blockbench",
-	"textures": {
-		"0": "gracecraft:item/flashlight",
-		"particle": "gracecraft:item/flashlight"
-	},
-	"elements": [
-		{
-			"from": [6.75, 3, 6.75],
-			"to": [9.25, 10, 9.25],
-			"rotation": {"angle": 0, "axis": "x", "origin": [7, 7, 7]},
-			"faces": {
-				"north": {"uv": [0, 0, 3, 7], "texture": "#0"},
-				"east": {"uv": [3, 0, 6, 7], "texture": "#0"},
-				"south": {"uv": [6, 0, 9, 7], "texture": "#0"},
-				"west": {"uv": [0, 7, 3, 14], "texture": "#0"},
-				"up": {"uv": [10, 14, 7, 11], "texture": "#0"},
-				"down": {"uv": [14, 9, 11, 12], "texture": "#0"}
-			}
-		},
-		{
-			"name": "head",
-			"from": [7, 11.25, 7],
-			"to": [9, 13.25, 9],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7, 14.25, 7]},
-			"faces": {
-				"north": {"uv": [10, 12, 12, 14], "texture": "#0"},
-				"east": {"uv": [12, 12, 14, 14], "texture": "#0"},
-				"south": {"uv": [13, 0, 15, 2], "texture": "#0"},
-				"west": {"uv": [13, 2, 15, 4], "texture": "#0"},
-				"up": {"uv": [15, 6, 13, 4], "texture": "#0"},
-				"down": {"uv": [2, 14, 0, 16], "texture": "#0"}
-			}
-		},
-		{
-			"name": "head",
-			"from": [6.5, 10, 6.5],
-			"to": [9.5, 13, 9.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7, 14, 7]},
-			"faces": {
-				"north": {"uv": [9, 0, 13, 3], "texture": "#0"},
-				"east": {"uv": [9, 3, 13, 6], "texture": "#0"},
-				"south": {"uv": [3, 11, 7, 14], "texture": "#0"},
-				"west": {"uv": [11, 6, 15, 9], "texture": "#0"},
-				"up": {"uv": [7, 11, 3, 7], "texture": "#0"},
-				"down": {"uv": [11, 7, 7, 11], "texture": "#0"}
-			}
-		}
-	],
-	"display": {
-		"thirdperson_righthand": {
-			"rotation": [-22.25, 0, 0],
-			"translation": [-0.5, -1, 2.25]
-		},
-		"thirdperson_lefthand": {
-			"translation": [0, 0, -1.5]
-		},
-		"firstperson_righthand": {
-			"rotation": [-90, 0, 0],
-			"translation": [0, 1.5, 0]
-		},
-		"firstperson_lefthand": {
-			"rotation": [-180, 0, 0]
-		},
-		"head": {
-			"rotation": [90, 0, 90],
-			"translation": [0, 11.75, 0]
-		}
-	},
-	"groups": [
-		0,
-		{
-			"name": "head",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"children": [1, 2]
-		}
-	]
+  "parent": "builtin/entity",
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    32,
+    32
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        -90
+      ],
+      "translation": [
+        -2,
+        -3.25,
+        0
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "translation": [
+        -2.25,
+        1,
+        1.75
+      ]
+    }
+  },
+  "textures": {
+    "particle": "gracecraft:item/flashlight"
+  }
 }
