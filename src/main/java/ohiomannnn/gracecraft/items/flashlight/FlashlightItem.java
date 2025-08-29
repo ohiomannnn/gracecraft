@@ -19,7 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import ohiomannnn.gracecraft.items.doombringer.DoombringerRenderer;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -40,6 +39,7 @@ import java.util.function.Consumer;
 
 public class FlashlightItem extends Item implements GeoItem {
     private static final RawAnimation ANIMATION_NONE = RawAnimation.begin().thenPlay("animation.model.none");
+    private static final RawAnimation ANIMATION_USE = RawAnimation.begin().thenPlay("animation.model.use");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -65,7 +65,8 @@ public class FlashlightItem extends Item implements GeoItem {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main_controller", 0, state -> PlayState.STOP)
-                .triggerableAnim("anim_none", ANIMATION_NONE));
+                .triggerableAnim("anim_none", ANIMATION_NONE)
+                .triggerableAnim("anim_use", ANIMATION_USE));
     }
     private static final Map<UUID, BlockPos> LAST_POS = new ConcurrentHashMap<>();
 
@@ -73,16 +74,13 @@ public class FlashlightItem extends Item implements GeoItem {
     public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int slot, boolean selected) {
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
-        if (level instanceof ServerLevel serverLevel) {
-            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel),"main_controller","anim_none");
-        }
 
         UUID uuid = player.getUUID();
 
         if (selected && !player.isSpectator()) {
             BlockPos targetPos;
 
-            HitResult hit = player.pick(8.0D, 0.0F, true);
+            HitResult hit = player.pick(8.0D, 1.0F, true);
 
             if (hit.getType() == HitResult.Type.BLOCK) {
                 BlockPos hitPos = ((BlockHitResult) hit).getBlockPos();
@@ -127,21 +125,25 @@ public class FlashlightItem extends Item implements GeoItem {
                 level.setBlock(prev, Blocks.AIR.defaultBlockState(), 3);
             }
         }
-
         super.inventoryTick(stack, level, entity, slot, selected);
     }
     public static float randFloat(Float rangeMin, Float rangeMax) {
-        Random r = new Random();
-        return rangeMin + (rangeMax - rangeMin) * r.nextFloat();
+        Random random = new Random();
+        return rangeMin + (rangeMax - rangeMin) * random.nextFloat();
     }
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && !player.isUnderWater()) {
-            level.playSound(null,
+            if (level instanceof ServerLevel serverLevel) {
+                triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel),"main_controller","anim_use");
+            }
+            level.playSound(
+                    null,
                     player.getX(), player.getY(), player.getZ(),
                     InitSounds.FLASH_SOUND.get(),
                     SoundSource.PLAYERS,
-                    1.0f, randFloat(1.0f, 1.5f));
+                    1.0f, randFloat(1.0f, 1.5f
+                    ));
 
             BlockPos pos = LAST_POS.get(player.getUUID());
             if (pos != null && level.getBlockState(pos).is(Blocks.LIGHT)) {

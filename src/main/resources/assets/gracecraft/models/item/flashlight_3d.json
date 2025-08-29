@@ -18,6 +18,18 @@
         0
       ]
     },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "translation": [
+        2,
+        -3.25,
+        0
+      ]
+    },
     "firstperson_righthand": {
       "rotation": [
         0,
@@ -25,9 +37,21 @@
         0
       ],
       "translation": [
-        -2.25,
-        1,
-        1.75
+        0,
+        5.75,
+        3.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "translation": [
+        0,
+        5.75,
+        3.75
       ]
     }
   },
