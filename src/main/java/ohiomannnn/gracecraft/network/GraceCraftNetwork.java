@@ -16,10 +16,11 @@ import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 import java.util.UUID;
 
-import static ohiomannnn.gracecraft.misc.InitDamageTypes.DOZER_ATTACK;
-import static ohiomannnn.gracecraft.misc.InitDamageTypes.LITANY_ATTACK;
+import static ohiomannnn.gracecraft.util.DamageTypes.DOZER_ATTACK;
+import static ohiomannnn.gracecraft.util.DamageTypes.LITANY_ATTACK;
 
 public final class GraceCraftNetwork {
+
     public static void registerPayloads(final RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(GraceCraft.MOD_ID);
 
@@ -78,7 +79,7 @@ public final class GraceCraftNetwork {
     public static void sendKillToServerWLitany(UUID target) {
         PacketDistributor.sendToServer(new KillLitanyPacket(target));
     }
-    public static void sendEntityToClient(ServerPlayer player, String entityName) {
-        PacketDistributor.sendToPlayer(player, new ShowEntityPacket(entityName));
+    public static void sendEntityToClient(ServerPlayer player, String overlayName) {
+        PacketDistributor.sendToPlayer(player, new ShowEntityPacket(overlayName));
     }
 }
