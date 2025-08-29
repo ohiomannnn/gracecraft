@@ -16,8 +16,8 @@ import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 import java.util.UUID;
 
-import static ohiomannnn.gracecraft.util.DamageTypes.DOZER_ATTACK;
-import static ohiomannnn.gracecraft.util.DamageTypes.LITANY_ATTACK;
+import static ohiomannnn.gracecraft.misc.InitDamageTypes.DOZER_ATTACK;
+import static ohiomannnn.gracecraft.misc.InitDamageTypes.LITANY_ATTACK;
 
 public final class GraceCraftNetwork {
 
