@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.killOverlays.DozerKillOverlay;
-import ohiomannnn.gracecraft.network.GraceCraftNetwork;
+import ohiomannnn.gracecraft.client.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 
 import java.util.Random;

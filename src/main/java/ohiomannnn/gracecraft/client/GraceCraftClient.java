@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft;
+package ohiomannnn.gracecraft.client;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -12,6 +12,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
@@ -38,7 +39,9 @@ public class GraceCraftClient {
         } else if (offHand.is(InitItems.DOOMBRINGER)) {
             model.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
         } else if (mainHand.is(InitItems.FLASHLIGHT)) {
-            model.rightArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
+            model.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+        } else if (offHand.is(InitItems.FLASHLIGHT)) {
+            model.leftArmPose = HumanoidModel.ArmPose.EMPTY;
         }
     }
 }

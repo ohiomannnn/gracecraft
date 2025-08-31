@@ -7,7 +7,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import ohiomannnn.gracecraft.network.GraceCraftNetwork;
+import ohiomannnn.gracecraft.client.network.GraceCraftNetwork;
 
 public class InitCommands {
     private static final SuggestionProvider<CommandSourceStack> PLAYER_SUGGESTIONS =

@@ -9,13 +9,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import ohiomannnn.gracecraft.blocks.InitBlocks;
-import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
-import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
-import ohiomannnn.gracecraft.network.GraceCraftNetwork;
+import ohiomannnn.gracecraft.client.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +26,6 @@ public class GraceCraft {
         modEventBus.addListener(GraceCraftNetwork::registerPayloads);
 
         InitItems.register(modEventBus);
-        InitBlocks.register(modEventBus);
         InitSounds.register(modEventBus);
         InitCreativeModeTabs.register(modEventBus);
 

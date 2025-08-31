@@ -10,48 +10,48 @@
       "rotation": [
         0,
         0,
-        -90
+        90
       ],
       "translation": [
-        -2,
-        -3.25,
-        0
+        2,
+        -1.75,
+        0.5
       ]
     },
     "thirdperson_lefthand": {
       "rotation": [
         0,
-        0,
-        90
+        180,
+        -90
       ],
       "translation": [
         2,
-        -3.25,
-        0
+        -1.75,
+        0.5
       ]
     },
     "firstperson_righthand": {
       "rotation": [
+        -90,
         0,
-        90,
-        0
+        90
       ],
       "translation": [
-        0,
-        5.75,
-        3.75
+        4.25,
+        2.75,
+        3.25
       ]
     },
     "firstperson_lefthand": {
       "rotation": [
+        90,
         0,
-        -90,
-        0
+        90
       ],
       "translation": [
-        0,
-        5.75,
-        3.75
+        4.25,
+        2.75,
+        3.25
       ]
     }
   },

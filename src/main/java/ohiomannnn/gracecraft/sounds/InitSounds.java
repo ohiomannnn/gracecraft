@@ -14,7 +14,6 @@ public class InitSounds {
 
     public static final Supplier<SoundEvent> FLASH_SOUND = registerSoundEvent("flash_sound");
 
-    public static final Supplier<SoundEvent> DOOM_SQUEAK = registerSoundEvent("doombringer_squeak");
     public static final Supplier<SoundEvent> JOEY_SCREAM = registerSoundEvent("joey_scream");
 
     public static final Supplier<SoundEvent> DOZY_ATTACK = registerSoundEvent("dozy_attack");

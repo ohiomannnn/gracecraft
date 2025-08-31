@@ -19,6 +19,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -77,7 +78,10 @@ public class FlashlightItem extends Item implements GeoItem {
 
         UUID uuid = player.getUUID();
 
-        if (selected && !player.isSpectator()) {
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+
+        if (!player.isSpectator() && mainHand.is(InitItems.FLASHLIGHT) || !player.isSpectator() && offHand.is(InitItems.FLASHLIGHT)) {
             BlockPos targetPos;
 
             HitResult hit = player.pick(8.0D, 1.0F, true);
@@ -133,7 +137,8 @@ public class FlashlightItem extends Item implements GeoItem {
     }
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && !player.isUnderWater()) {
+        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && !player.isUnderWater() ||
+                !level.isClientSide() && hand == InteractionHand.OFF_HAND && !player.isUnderWater()) {
             if (level instanceof ServerLevel serverLevel) {
                 triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel),"main_controller","anim_use");
             }
