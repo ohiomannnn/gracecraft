@@ -12,7 +12,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
-import ohiomannnn.gracecraft.client.network.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class GraceCraft {
     public static final Logger LOGGER = LoggerFactory.getLogger("GraceCraft");;
 
     public GraceCraft(IEventBus modEventBus) {
-        modEventBus.addListener(GraceCraftNetwork::registerPayloads);
+        modEventBus.addListener(GraceCraftNetwork::registerPackets);
 
         InitItems.register(modEventBus);
         InitSounds.register(modEventBus);

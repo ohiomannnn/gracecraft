@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.client.network;
+package ohiomannnn.gracecraft.network;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -21,7 +21,7 @@ import static ohiomannnn.gracecraft.misc.InitDamageTypes.LITANY_ATTACK;
 
 public final class GraceCraftNetwork {
 
-    public static void registerPayloads(final RegisterPayloadHandlersEvent event) {
+    public static void registerPackets(final RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(GraceCraft.MOD_ID);
 
         registrar.playToServer(

@@ -16,13 +16,13 @@ import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
-import ohiomannnn.gracecraft.network.GraceCraftClientNetwork;
+import ohiomannnn.gracecraft.client.network.GraceCraftClientNetwork;
 
 @Mod(value = GraceCraft.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = GraceCraft.MOD_ID, value = Dist.CLIENT)
 public class GraceCraftClient {
     public GraceCraftClient(IEventBus modEventBus) {
-        modEventBus.addListener(GraceCraftClientNetwork::registerClientPayloads);
+        modEventBus.addListener(GraceCraftClientNetwork::registerClientPackets);
 
         modEventBus.addListener(EntityDozer::RegisterGuiLayers);
         modEventBus.addListener(EntityLitany::RegisterGuiLayers);

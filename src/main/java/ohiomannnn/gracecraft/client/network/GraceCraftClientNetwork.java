@@ -1,4 +1,4 @@
-package ohiomannnn.gracecraft.network;
+package ohiomannnn.gracecraft.client.network;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -8,7 +8,7 @@ import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 public final class GraceCraftClientNetwork {
-    public static void registerClientPayloads(RegisterPayloadHandlersEvent event) {
+    public static void registerClientPackets(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(GraceCraft.MOD_ID);
 
         registrar.playToClient(
