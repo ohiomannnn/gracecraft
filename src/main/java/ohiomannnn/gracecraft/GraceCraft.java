@@ -9,6 +9,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import ohiomannnn.gracecraft.entity.InitEntities;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.misc.InitCommands;
 import ohiomannnn.gracecraft.misc.InitCreativeModeTabs;
@@ -26,6 +27,7 @@ public class GraceCraft {
         modEventBus.addListener(GraceCraftNetwork::registerPackets);
 
         InitItems.register(modEventBus);
+        InitEntities.register(modEventBus);
         InitSounds.register(modEventBus);
         InitCreativeModeTabs.register(modEventBus);
 
@@ -38,6 +40,7 @@ public class GraceCraft {
 
     public static boolean isCrouchingLitany;
     public static boolean isCrouchingDozer;
+
     @SubscribeEvent
     public void onKeyInput(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();

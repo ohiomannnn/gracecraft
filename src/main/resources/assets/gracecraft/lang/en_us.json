@@ -23,6 +23,9 @@
   "death.attack.dozer_attack": "%s was killed by Dozer",
   "death.attack.litany_attack": "%s was killed by Litany",
   "death.attack.kookoo_attack": "%s was killed by Kookoo",
+  "death.attack.sorrow_attack": "%s was flattened by Sorrow",
+
+  "entity.gracecraft.sorrow": "Sorrow",
 
   "tooltip.gracecraft.doombringer.friendly": "Friendly",
   "tooltip.gracecraft.doombringer.notFriendly": "NOT Friendly"

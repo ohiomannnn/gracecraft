@@ -13,4 +13,6 @@ public class InitDamageTypes {
             ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "litany_attack"));
     public static final ResourceKey<DamageType> KOOKOO_ATTACK =
             ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "kookoo_attack"));
+    public static final ResourceKey<DamageType> SORROW_ATTACK =
+            ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "sorrow_attack"));
 }

@@ -62,5 +62,12 @@
         "name": "gracecraft:litany_attack_kill"
       }
     ]
+  },
+  "sorrow_rain": {
+    "sounds": [
+      {
+        "name": "gracecraft:sorrow_rain"
+      }
+    ]
   }
 }

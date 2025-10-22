@@ -24,6 +24,8 @@ public class InitSounds {
     public static final Supplier<SoundEvent> LITANY_ATTACK_JUMPSCARE = registerSoundEvent("litany_attack_jumpscare");
     public static final Supplier<SoundEvent> LITANY_ATTACK_KILL = registerSoundEvent("litany_attack_kill");
 
+    public static final Supplier<SoundEvent> SORROW_RAIN = registerSoundEvent("sorrow_rain");
+
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
