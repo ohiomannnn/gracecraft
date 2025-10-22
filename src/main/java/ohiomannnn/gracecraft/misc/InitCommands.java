@@ -7,6 +7,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import ohiomannnn.gracecraft.entity.InitEntities;
+import ohiomannnn.gracecraft.entity.Sorrow;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 
 public class InitCommands {
@@ -20,6 +22,7 @@ public class InitCommands {
     private static final SuggestionProvider<CommandSourceStack> ENTITY_SUGGESTIONS =
             (context, builder) -> {
                 builder.suggest("EntityDozer");
+                builder.suggest("EntitySorrow");
                 builder.suggest("EntityLitany");
                 return builder.buildFuture();
             };
@@ -49,6 +52,11 @@ public class InitCommands {
         if (targetPlayer == null) {
             source.sendFailure(Component.translatable("commands.gracecraft.spawnentity.playernotfound"));
             return 0;
+        }
+        if (entityName.equals("EntitySorrow")) {
+            Sorrow entity = new Sorrow(InitEntities.SORROW.get(), source.getLevel());
+            entity.setPos(targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ());
+            source.getLevel().addFreshEntity(entity);
         }
         GraceCraftNetwork.sendEntityToClient(targetPlayer, entityName);
         source.sendSuccess(() -> Component.translatable("commands.gracecraft.spawnentity.sendtoplayer", entityName, playerName), true);

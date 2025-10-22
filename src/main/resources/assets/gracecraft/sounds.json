@@ -69,5 +69,12 @@
         "name": "gracecraft:sorrow_rain"
       }
     ]
+  },
+  "sorrow_gone": {
+    "sounds": [
+      {
+        "name": "gracecraft:sorrow_gone"
+      }
+    ]
   }
 }

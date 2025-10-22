@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +19,7 @@ public class Sorrow extends Entity {
 
     public boolean didShake = false;
     public boolean sound = true;
+    public boolean sound2 = true;
 
     public Sorrow(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -38,6 +38,10 @@ public class Sorrow extends Entity {
                 level().playSound(null, getX(), getY(), getZ(), InitSounds.SORROW_RAIN.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
                 sound = false;
             }
+            if (tickCount > 160 && entity.isAlive() && sound2) {
+                level().playSound(null, getX(), getY(), getZ(), InitSounds.SORROW_GONE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+                sound2 = false;
+            }
             if (entity instanceof LivingEntity living && tickCount > 155) {
                 BlockPos posAbove = living.blockPosition().above();
                 if (level().canSeeSky(posAbove)) {
@@ -52,6 +56,7 @@ public class Sorrow extends Entity {
         if (tickCount > 160) {
             this.discard();
             sound = true;
+            sound2 = true;
         }
     }
 
