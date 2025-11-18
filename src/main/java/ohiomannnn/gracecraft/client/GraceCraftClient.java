@@ -12,9 +12,12 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.client.network.GraceCraftClientNetwork;
 import ohiomannnn.gracecraft.entity.InitEntities;
@@ -27,11 +30,12 @@ import ohiomannnn.gracecraft.util.Clock;
 @Mod(value = GraceCraft.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = GraceCraft.MOD_ID, value = Dist.CLIENT)
 public class GraceCraftClient {
-    public GraceCraftClient(IEventBus modEventBus) {
+    public GraceCraftClient(IEventBus modEventBus, ModContainer container) {
         modEventBus.addListener(GraceCraftClientNetwork::registerClientPackets);
 
         modEventBus.addListener(EntityDozer::RegisterGuiLayers);
         modEventBus.addListener(EntityLitany::RegisterGuiLayers);
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
     @SubscribeEvent
     public static void onRenderPlayer(RenderLivingEvent.Pre<? extends LivingEntity, ? extends EntityModel<?>> event) {

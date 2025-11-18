@@ -109,13 +109,12 @@ public class DoombringerItem extends Item implements GeoItem {
                     if (selected) {
                         serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
                                 InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
-                        soundPlayed = true;
                     } else {
                         serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
                                 InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS,
                                 0.5f, 1.0f);
-                        soundPlayed = true;
                     }
+                    soundPlayed = true;
                 }
 
                 Long id = GeoItem.getId(stack);

@@ -2,7 +2,10 @@
   "item.gracecraft.flashlight": "Flashlight",
   "item.gracecraft.doombringer": "Doombringer",
 
-  "block.gracecraft.light_block": "Light Block",
+  "gracecraft.configuration.dozer_spawn": "Dozer spawn",
+  "gracecraft.configuration.rand_value": "Value to add",
+  "gracecraft.configuration.litany_spawn": "Litany spawn",
+  "gracecraft.configuration.spawn_entity_random": "Enable random entity spawning",
 
   "creative.gracecraft.grace_items_tab": "Gracecraft Items",
 
