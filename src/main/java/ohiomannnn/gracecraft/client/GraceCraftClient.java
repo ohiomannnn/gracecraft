@@ -20,11 +20,12 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.client.network.GraceCraftClientNetwork;
+import ohiomannnn.gracecraft.client.render.MimeRenderer;
 import ohiomannnn.gracecraft.entity.InitEntities;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
-import ohiomannnn.gracecraft.render.SorrowRenderer;
+import ohiomannnn.gracecraft.client.render.SorrowRenderer;
 import ohiomannnn.gracecraft.util.Clock;
 
 @Mod(value = GraceCraft.MOD_ID, dist = Dist.CLIENT)
@@ -57,6 +58,7 @@ public class GraceCraftClient {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(InitEntities.SORROW.get(), SorrowRenderer::new);
+        event.registerEntityRenderer(InitEntities.MIME.get(), MimeRenderer::new);
     }
 
     public static final int redDuration = 950;

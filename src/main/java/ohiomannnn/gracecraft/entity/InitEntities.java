@@ -9,13 +9,20 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import ohiomannnn.gracecraft.GraceCraft;
 
 public class InitEntities {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, GraceCraft.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, GraceCraft.MOD_ID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<Sorrow>> SORROW = ENTITY_TYPES.register(
             "sorrow",
             () -> EntityType.Builder.of(Sorrow::new, MobCategory.MISC)
-                    .build("sorrow"));
+                    .build("sorrow")
+    );
+
+    public static final DeferredHolder<EntityType<?>, EntityType<Mime>> MIME = ENTITY_TYPES.register(
+            "mime",
+            () -> EntityType.Builder.of(Mime::new, MobCategory.MISC)
+                    .setTrackingRange(100)
+                    .build("mime")
+    );
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

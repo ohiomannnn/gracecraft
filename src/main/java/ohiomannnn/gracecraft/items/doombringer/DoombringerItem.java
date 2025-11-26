@@ -117,11 +117,9 @@ public class DoombringerItem extends Item implements GeoItem {
                     soundPlayed = true;
                 }
 
-                Long id = GeoItem.getId(stack);
-                if (id != null) {
-                    triggerAnim(player, id, "main_controller", "anim_scream");
-                    canShut = true;
-                }
+                long id = GeoItem.getId(stack);
+                triggerAnim(player, id, "main_controller", "anim_scream");
+                canShut = true;
             }
         }
 
@@ -159,11 +157,7 @@ public class DoombringerItem extends Item implements GeoItem {
         if (level instanceof ServerLevel serverLevel) {
             ItemStack stack = player.getItemInHand(hand);
 
-            Long id = GeoItem.getId(stack);
-
-            if (id == null) {
-                id = GeoItem.getOrAssignId(stack, serverLevel);
-            }
+            long id = GeoItem.getId(stack);
 
             if (canShut) {
                 if (!isFriendly(stack)) {

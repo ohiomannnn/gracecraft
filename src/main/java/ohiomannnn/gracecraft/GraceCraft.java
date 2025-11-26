@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @Mod(GraceCraft.MOD_ID)
 public class GraceCraft {
     public static final String MOD_ID = "gracecraft";
-    public static final Logger LOGGER = LoggerFactory.getLogger("GraceCraft");;
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public GraceCraft(IEventBus modEventBus, ModContainer container) {
         modEventBus.addListener(GraceCraftNetwork::registerPackets);

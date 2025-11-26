@@ -18,6 +18,7 @@ version = mod_version
 group = mod_group_id
 
 repositories {
+    mavenCentral()
     // Add here additional repositories if required by some of the dependencies below.
     maven {
         name = 'GeckoLib'
@@ -25,6 +26,12 @@ repositories {
         content {
             includeGroupByRegex("software\\.bernie.*")
             includeGroup("com.eliotlash.mclib")
+        }
+    }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
         }
     }
 }
@@ -141,6 +148,7 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation "curse.maven:parcool-482378:6940391"
     implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.7.7"
 }
 
