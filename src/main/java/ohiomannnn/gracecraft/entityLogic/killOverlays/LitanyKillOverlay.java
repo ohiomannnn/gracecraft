@@ -121,10 +121,10 @@ public class LitanyKillOverlay extends Overlay {
         }
     }
     private float randScaleHeight() {
-        return MIN_SCALE_HEIGHT + random.nextFloat() * (MAX_SCALE_HEIGHT - MIN_SCALE_HEIGHT);
+        return MIN_SCALE_HEIGHT * (MAX_SCALE_HEIGHT - MIN_SCALE_HEIGHT);
     }
     private float randScaleWidth() {
-        return MIN_SCALE_WIDTH + random.nextFloat() * (MAX_SCALE_WIDTH - MIN_SCALE_WIDTH);
+        return MIN_SCALE_WIDTH * (MAX_SCALE_WIDTH - MIN_SCALE_WIDTH);
     }
 
     private static class TextEntry {

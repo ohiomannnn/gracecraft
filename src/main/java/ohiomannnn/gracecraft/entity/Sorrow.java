@@ -21,7 +21,7 @@ public class Sorrow extends Entity {
     public boolean sound = true;
     public boolean sound2 = true;
 
-    public Sorrow(EntityType<?> entityType, Level level) {
+    public Sorrow(EntityType<? extends Sorrow> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -29,23 +29,22 @@ public class Sorrow extends Entity {
     public void tick() {
         super.tick();
 
-        BlockPos center = new BlockPos(getBlockX(), getBlockY(), getBlockZ());
-        AABB area = new AABB(center).inflate(200);
-        List<Entity> entities = level().getEntities(null, area);
+        BlockPos center = BlockPos.containing(this.position());
+        List<Entity> entities = level().getEntities(null, new AABB(center).inflate(1000));
 
         for (Entity entity : entities) {
             if (sound) {
-                level().playSound(null, getX(), getY(), getZ(), InitSounds.SORROW_RAIN.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+                level().playSound(null, getX(), getY(), getZ(), InitSounds.SORROW_RAIN.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
                 sound = false;
             }
             if (tickCount > 160 && entity.isAlive() && sound2) {
-                level().playSound(null, getX(), getY(), getZ(), InitSounds.SORROW_GONE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+                level().playSound(null, getX(), getY(), getZ(), InitSounds.SORROW_GONE.get(), SoundSource.HOSTILE, 10.0F, 1.0F);
                 sound2 = false;
             }
             if (entity instanceof LivingEntity living && tickCount > 155) {
                 BlockPos posAbove = living.blockPosition().above();
                 if (level().canSeeSky(posAbove)) {
-                    living.hurt(level().damageSources().source(InitDamageTypes.SORROW_ATTACK), 250F);
+                    living.hurt(living.damageSources().source(InitDamageTypes.SORROW_ATTACK), 250F);
                 }
             }
             if (entity instanceof ItemEntity itemEntity) {
@@ -64,8 +63,12 @@ public class Sorrow extends Entity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compoundTag) {}
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        this.tickCount = tag.getInt("TickCount");
+    }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compoundTag) {}
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        tag.putInt("TickCount", this.tickCount);
+    }
 }

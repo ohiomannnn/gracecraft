@@ -3,7 +3,8 @@ package ohiomannnn.gracecraft.client.network;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
+import ohiomannnn.gracecraft.entityLogic.EntityEngine;
+import ohiomannnn.gracecraft.entityLogic.entities.Dozer;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
@@ -20,7 +21,7 @@ public final class GraceCraftClientNetwork {
     private static void handleShowOverlayClientBound(ShowEntityPacket msg, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (msg.entityName().equals("EntityDozer")) {
-                EntityDozer.start();
+                EntityEngine.INSTANCE.add(new Dozer());
             }
             if (msg.entityName().equals("EntityLitany")) {
                 EntityLitany.start();

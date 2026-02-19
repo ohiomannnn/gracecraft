@@ -9,13 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 public record ShowEntityPacket(String entityName) implements CustomPacketPayload {
 
-    public static final Type<ShowEntityPacket> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "show_entity"));
+    public static final Type<ShowEntityPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "show_entity"));
 
     public static final StreamCodec<FriendlyByteBuf, ShowEntityPacket> STREAM_CODEC =
             new StreamCodec<>() {
                 @Override
-                public @NotNull ShowEntityPacket decode(FriendlyByteBuf buf) {
+                public ShowEntityPacket decode(FriendlyByteBuf buf) {
                     return new ShowEntityPacket(buf.readUtf());
                 }
 
@@ -26,7 +25,5 @@ public record ShowEntityPacket(String entityName) implements CustomPacketPayload
             };
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
-        return TYPE;
-    }
+    public Type<? extends CustomPacketPayload> type() { return TYPE; }
 }

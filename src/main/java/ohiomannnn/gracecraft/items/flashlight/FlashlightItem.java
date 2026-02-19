@@ -72,7 +72,7 @@ public class FlashlightItem extends Item implements GeoItem {
     private static final Map<UUID, BlockPos> LAST_POS = new ConcurrentHashMap<>();
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
 
@@ -115,8 +115,7 @@ public class FlashlightItem extends Item implements GeoItem {
             if (prev != null && !prev.equals(targetPos) && level.getBlockState(prev).is(Blocks.LIGHT)) {
                 level.setBlock(prev, Blocks.AIR.defaultBlockState(), 3);
             }
-            BlockState lightState = Blocks.LIGHT.defaultBlockState()
-                    .setValue(LightBlock.LEVEL, 12);
+            BlockState lightState = Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 12);
 
             if (level.getBlockState(targetPos).isAir() || level.getBlockState(targetPos).is(Blocks.LIGHT)) {
                 level.setBlock(targetPos, lightState, 3);
@@ -135,20 +134,15 @@ public class FlashlightItem extends Item implements GeoItem {
         Random random = new Random();
         return rangeMin + (rangeMax - rangeMin) * random.nextFloat();
     }
+
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && !player.isUnderWater() ||
-                !level.isClientSide() && hand == InteractionHand.OFF_HAND && !player.isUnderWater()) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && !player.isUnderWater() || !level.isClientSide() && hand == InteractionHand.OFF_HAND && !player.isUnderWater()) {
+
             if (level instanceof ServerLevel serverLevel) {
                 triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel),"main_controller","anim_use");
             }
-            level.playSound(
-                    null,
-                    player.getX(), player.getY(), player.getZ(),
-                    InitSounds.FLASH_SOUND.get(),
-                    SoundSource.PLAYERS,
-                    1.0f, randFloat(1.0f, 1.5f
-                    ));
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.FLASH_SOUND.get(), SoundSource.PLAYERS, 1.0f, randFloat(1.0f, 1.5f));
 
             BlockPos pos = LAST_POS.get(player.getUUID());
             if (pos != null && level.getBlockState(pos).is(Blocks.LIGHT)) {

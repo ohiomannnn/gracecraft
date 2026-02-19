@@ -54,8 +54,7 @@ public class SorrowRenderer extends EntityRenderer<Sorrow> {
         lastTime = time;
 
         if (entity.tickCount > 140 && System.currentTimeMillis() - GraceCraftClient.redTimeStamp > 1_000) GraceCraftClient.redTimeStamp = System.currentTimeMillis();
-        if (entity.tickCount > 150 && !entity.didShake && System.currentTimeMillis() - GraceCraftClient.shakeTimestamp > 1_000) {
-            GraceCraftClient.shakeTimestamp = System.currentTimeMillis();
+        if (entity.tickCount > 150 && !entity.didShake) {
             entity.didShake = true;
             Player player = Minecraft.getInstance().player;
             player.hurtTime = 15;

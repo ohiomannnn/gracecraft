@@ -3,8 +3,10 @@ package ohiomannnn.gracecraft.handler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import ohiomannnn.gracecraft.config.GraceCraftConfig;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 import java.util.Random;
 
@@ -21,14 +23,14 @@ public class EntitySpawner {
             if (!level.players().isEmpty()) {
                 Player player = level.players().get(level.random.nextInt(level.players().size()));
 
-                GraceCraftNetwork.sendEntityToClient((ServerPlayer) player, "EntityDozer");
+                PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("EntityDozer"));
             }
         }
         if (level.getGameTime() % (LITANY_SPAWN + random.nextInt(GraceCraftConfig.COMMON.RAND_VALUE.get())) == 0) {
             if (!level.players().isEmpty()) {
                 Player player = level.players().get(level.random.nextInt(level.players().size()));
 
-                GraceCraftNetwork.sendEntityToClient((ServerPlayer) player, "EntityLitany");
+                PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("EntityLitany"));
             }
         }
     }

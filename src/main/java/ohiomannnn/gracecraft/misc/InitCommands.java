@@ -7,9 +7,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import ohiomannnn.gracecraft.entity.InitEntities;
 import ohiomannnn.gracecraft.entity.Sorrow;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
+import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
 public class InitCommands {
     private static final SuggestionProvider<CommandSourceStack> PLAYER_SUGGESTIONS =
@@ -58,7 +60,7 @@ public class InitCommands {
             entity.setPos(targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ());
             source.getLevel().addFreshEntity(entity);
         }
-        GraceCraftNetwork.sendEntityToClient(targetPlayer, entityName);
+        PacketDistributor.sendToPlayer(targetPlayer, new ShowEntityPacket(entityName));
         source.sendSuccess(() -> Component.translatable("commands.gracecraft.spawnentity.sendtoplayer", entityName, playerName), true);
         return 1;
     }

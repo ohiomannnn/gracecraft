@@ -1,15 +1,12 @@
 package ohiomannnn.gracecraft.client;
 
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -22,7 +19,6 @@ import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.client.network.GraceCraftClientNetwork;
 import ohiomannnn.gracecraft.client.render.MimeRenderer;
 import ohiomannnn.gracecraft.entity.InitEntities;
-import ohiomannnn.gracecraft.entityLogic.entities.EntityDozer;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
 import ohiomannnn.gracecraft.client.render.SorrowRenderer;
@@ -34,7 +30,6 @@ public class GraceCraftClient {
     public GraceCraftClient(IEventBus modEventBus, ModContainer container) {
         modEventBus.addListener(GraceCraftClientNetwork::registerClientPackets);
 
-        modEventBus.addListener(EntityDozer::RegisterGuiLayers);
         modEventBus.addListener(EntityLitany::RegisterGuiLayers);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
@@ -63,8 +58,6 @@ public class GraceCraftClient {
 
     public static final int redDuration = 950;
     public static long redTimeStamp;
-    public static final int shakeDuration = 1_500;
-    public static long shakeTimestamp;
 
     @SubscribeEvent
     public static void onFogDensity(ViewportEvent.RenderFog event) {
@@ -108,27 +101,6 @@ public class GraceCraftClient {
             event.setBlue(b);
         }
     }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onRenderGuiPre(RenderGuiEvent.Pre event) {
-        long now = System.currentTimeMillis();
-        long end = shakeTimestamp + shakeDuration;
-
-        if (now < end) {
-            float progress = (float) (now - shakeTimestamp) / shakeDuration;
-
-            float fade = 1.0F - progress;
-
-            float mult = 2.0F * fade;
-
-            double horizontal = Mth.clamp(Math.sin(now * 0.02), -0.7, 0.7) * 15;
-            double vertical   = Mth.clamp(Math.sin(now * 0.01 + 2), -0.7, 0.7) * 3;
-
-            GuiGraphics graphics = event.getGuiGraphics();
-            graphics.pose().translate(horizontal * mult, vertical * mult, 0);
-        }
-    }
-
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent event) {

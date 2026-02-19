@@ -26,8 +26,7 @@ public class EntityLitany {
     }
 
     private static final Map<EyePosition, Map<EyeStage, ResourceLocation>> EYE_TEXTURES = new HashMap<>();
-    private static final ResourceLocation LITANY =
-            ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany.png");
+    private static final ResourceLocation LITANY = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany.png");
 
     static {
         EYE_TEXTURES.put(EyePosition.LEFT, Map.of(
@@ -53,6 +52,7 @@ public class EntityLitany {
     private static final int CYCLES_TOTAL = 3;
 
     private static boolean active = false;
+    private static boolean firstTickMid = false;
     private static long cycleStartTick = -1;
     private static int cyclesDone = 0;
     private static int statePlayed = 1;
@@ -91,21 +91,18 @@ public class EntityLitany {
 
             long ticksInCycle = t - cycleStartTick;
 
-            if (EntityDozer.endOthersFromDozer) {
-                active = false;
-            }
-
             if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS_W_KILL) {
                 if (!isCrouchingLitany) {
                     playSoundEntity(player, 4);
                     assert player != null;
-                    GraceCraftNetwork.sendKillToServerWLitany(player.getUUID());
+                    //GraceCraftNetwork.sendKillToServerWLitany(player.getUUID());
                     mc.setOverlay(new LitanyKillOverlay());
                     active = false;
                     endOthersFromLitany = true;
                     return;
                 }
             }
+            boolean color = false;
 
             if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS) {
                 SHAKE_AMPLITUDE = 1;
@@ -120,6 +117,10 @@ public class EntityLitany {
                     statePlayed = 1;
                 }
             } else if (ticksInCycle >= MID_SWITCH_TICKS) {
+                if (!firstTickMid) {
+                    color = true;
+                    firstTickMid = true;
+                }
                 SHAKE_AMPLITUDE = 6;
                 texture = switch (cyclesDone) {
                     case 0 -> EYE_TEXTURES.get(EyePosition.CENTER).get(EyeStage.OPENING);
@@ -132,6 +133,7 @@ public class EntityLitany {
                     statePlayed = 3;
                 }
             } else {
+                firstTickMid = false;
                 SHAKE_AMPLITUDE = 2;
                 texture = LITANY;
                 if (statePlayed == 1) {
@@ -143,7 +145,9 @@ public class EntityLitany {
             int shakeX = LitanyBaseX + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
             int shakeY = LitanyBaseY + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
 
+            guiGraphics.setColor(1.0F, color ? 0.0F : 1.0F, color ? 0.0F : 1.0F, 1.0F);
             guiGraphics.blit(texture, shakeX, shakeY, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+            guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             if (ticksInCycle >= DURATION_TICKS) {
                 cyclesDone++;

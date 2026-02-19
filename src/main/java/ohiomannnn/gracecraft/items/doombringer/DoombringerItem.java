@@ -1,9 +1,11 @@
 package ohiomannnn.gracecraft.items.doombringer;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundStopSoundPacket;
@@ -64,8 +66,7 @@ public class DoombringerItem extends Item implements GeoItem {
 
             @Override
             public BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
-                if (this.renderer == null)
-                    this.renderer = new DoombringerRenderer();
+                if (this.renderer == null) this.renderer = new DoombringerRenderer();
                 return this.renderer;
             }
         });
@@ -73,7 +74,7 @@ public class DoombringerItem extends Item implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main_controller", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "main_controller", 4, state -> PlayState.STOP)
                 .triggerableAnim("anim_pat", ANIMATION_PAT)
                 .triggerableAnim("anim_scream", ANIMATION_SCREAM)
                 .triggerableAnim("anim_shut", ANIMATION_SHUT));
@@ -91,9 +92,8 @@ public class DoombringerItem extends Item implements GeoItem {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (!(entity instanceof Player player)) return;
-        if (level instanceof ClientLevel) return;
         if (isFriendly(stack)) return;
 
         if (StartTick == -1) {
@@ -103,57 +103,52 @@ public class DoombringerItem extends Item implements GeoItem {
 
         long gameTicks = level.getGameTime() - StartTick;
 
-        if (gameTicks == TO_SCREAM) {
-            if (level instanceof ServerLevel serverLevel) {
-                if (!soundPlayed) {
-                    if (selected) {
-                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
-                                InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
-                    } else {
-                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
-                                InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS,
-                                0.5f, 1.0f);
+        if (!level.isClientSide) {
+            if (gameTicks == TO_SCREAM) {
+                if (level instanceof ServerLevel serverLevel) {
+                    if (!soundPlayed) {
+                        if (selected) {
+                            serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
+                        } else {
+                            serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
+                        }
+                        soundPlayed = true;
                     }
-                    soundPlayed = true;
-                }
 
-                long id = GeoItem.getId(stack);
-                triggerAnim(player, id, "main_controller", "anim_scream");
-                canShut = true;
+                    long id = GeoItem.getId(stack);
+                    triggerAnim(player, id, "main_controller", "anim_scream");
+                    canShut = true;
+                }
             }
         }
+
 
         if (gameTicks >= TO_EXPLOSION) {
             StartTick = -1;
 
-            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-                ItemStack stackToDel = player.getInventory().getItem(i);
-                if (stackToDel.getItem() instanceof DoombringerItem && !isFriendly(stackToDel)) {
-                    DoombringerItem.StartTick = -1;
-                    DoombringerItem.canShut = false;
-                    player.getInventory().setItem(i, ItemStack.EMPTY);
+            if (!level.isClientSide) {
+                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                    ItemStack stackToDel = player.getInventory().getItem(i);
+                    if (stackToDel.getItem() instanceof DoombringerItem && !isFriendly(stackToDel)) {
+                        DoombringerItem.StartTick = -1;
+                        DoombringerItem.canShut = false;
+                        player.getInventory().setItem(i, ItemStack.EMPTY);
+                    }
                 }
             }
 
-            level.explode(
-                    null,
-                    player.getX(), player.getY() + 2, player.getZ(),
-                    3.0f,
-                    false,
-                    Level.ExplosionInteraction.NONE
-            );
+            if (level.isClientSide) {
+                Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.EXPLOSION_EMITTER, player.getX(), player.getEyeY(), player.getZ(), 0.0D, 0.0D, 0.0D);
+            }
 
-            DamageSources dsProvider = new DamageSources(level.registryAccess());
-            DamageSource suicideSource = dsProvider.explosion(player, player);
-
-            player.hurt(suicideSource, Float.MAX_VALUE);
+            if (!level.isClientSide) {
+                player.hurt(player.damageSources().explosion(null), Float.MAX_VALUE);
+            }
         }
-
-        super.inventoryTick(stack, level, entity, slot, selected);
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (level instanceof ServerLevel serverLevel) {
             ItemStack stack = player.getItemInHand(hand);
 
@@ -166,10 +161,7 @@ public class DoombringerItem extends Item implements GeoItem {
                     StartTick = -1;
 
                     for (ServerPlayer sp : serverLevel.players()) {
-                        sp.connection.send(new ClientboundStopSoundPacket(
-                                ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"),
-                                SoundSource.PLAYERS
-                        ));
+                        sp.connection.send(new ClientboundStopSoundPacket(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"), SoundSource.PLAYERS));
                     }
                 } else {
                     triggerAnim(player, id, "main_controller", "anim_pat");
@@ -185,13 +177,11 @@ public class DoombringerItem extends Item implements GeoItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> components, TooltipFlag flag) {
         if (isFriendly(stack)) {
-            tooltip.add(Component.translatable("tooltip.gracecraft.doombringer.friendly")
-                    .withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
+            components.add(Component.translatable("tooltip.gracecraft.doombringer.friendly").withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
         } else {
-            tooltip.add(Component.translatable("tooltip.gracecraft.doombringer.notFriendly")
-                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+            components.add(Component.translatable("tooltip.gracecraft.doombringer.notFriendly").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         }
     }
 
