@@ -1,8 +1,6 @@
 package ohiomannnn.gracecraft.items.doombringer;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,11 +10,10 @@ import net.minecraft.network.protocol.game.ClientboundStopSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -26,7 +23,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.sounds.InitSounds;
-import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -41,18 +37,19 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class DoombringerItem extends Item implements GeoItem {
-    private static final RawAnimation ANIMATION_PAT   = RawAnimation.begin().thenPlay("animation.model.pat");
+
+    private static final RawAnimation ANIMATION_PAT  = RawAnimation.begin().thenPlay("animation.model.pat");
     private static final RawAnimation ANIMATION_SCREAM = RawAnimation.begin().thenPlay("animation.model.scream");
-    private static final RawAnimation ANIMATION_SHUT  = RawAnimation.begin().thenPlay("animation.model.shut");
+    private static final RawAnimation ANIMATION_SHUT = RawAnimation.begin().thenPlay("animation.model.shut");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private static final int TO_SCREAM = 250;
     private static final int TO_EXPLOSION = 365;
 
-    private static long StartTick = -1;
-    private static boolean canShut = false;
-    private static boolean soundPlayed = false;
+    private long tickCount = 0;
+    private boolean canShut = false;
+    private boolean soundPlayed = false;
 
     public DoombringerItem(Properties properties) {
         super(properties);
@@ -96,52 +93,44 @@ public class DoombringerItem extends Item implements GeoItem {
         if (!(entity instanceof Player player)) return;
         if (isFriendly(stack)) return;
 
-        if (StartTick == -1) {
-            StartTick = level.getGameTime();
-            soundPlayed = false;
-        }
+        GraceCraft.LOGGER.info("t = {}", tickCount);
+        tickCount++;
 
-        long gameTicks = level.getGameTime() - StartTick;
+        if (tickCount == TO_SCREAM) {
+            if (!level.isClientSide) {
 
-        if (!level.isClientSide) {
-            if (gameTicks == TO_SCREAM) {
-                if (level instanceof ServerLevel serverLevel) {
-                    if (!soundPlayed) {
-                        if (selected) {
-                            serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
-                        } else {
-                            serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
-                        }
-                        soundPlayed = true;
+                if (!soundPlayed) {
+                    if (selected) {
+                        level.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS);
+                    } else {
+                        level.playSound(null, player.getX(), player.getY(), player.getZ(), InitSounds.JOEY_SCREAM.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
                     }
-
-                    long id = GeoItem.getId(stack);
-                    triggerAnim(player, id, "main_controller", "anim_scream");
-                    canShut = true;
+                    soundPlayed = true;
                 }
+
+                long id = GeoItem.getId(stack);
+                triggerAnim(player, id, "main_controller", "anim_scream");
+                canShut = true;
             }
         }
 
 
-        if (gameTicks >= TO_EXPLOSION) {
-            StartTick = -1;
-
+        if (tickCount == TO_EXPLOSION) {
             if (!level.isClientSide) {
+
                 for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                     ItemStack stackToDel = player.getInventory().getItem(i);
                     if (stackToDel.getItem() instanceof DoombringerItem && !isFriendly(stackToDel)) {
-                        DoombringerItem.StartTick = -1;
-                        DoombringerItem.canShut = false;
                         player.getInventory().setItem(i, ItemStack.EMPTY);
                     }
                 }
-            }
 
-            if (level.isClientSide) {
-                Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.EXPLOSION_EMITTER, player.getX(), player.getEyeY(), player.getZ(), 0.0D, 0.0D, 0.0D);
-            }
+                level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 2.0F, (1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F) * 0.7F);
 
-            if (!level.isClientSide) {
+                if (level instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, player.getX(), player.getEyeY(), player.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                }
+
                 player.hurt(player.damageSources().explosion(null), Float.MAX_VALUE);
             }
         }
@@ -158,7 +147,7 @@ public class DoombringerItem extends Item implements GeoItem {
                 if (!isFriendly(stack)) {
                     triggerAnim(player, id, "main_controller", "anim_shut");
                     canShut = false;
-                    StartTick = -1;
+                    tickCount = 0;
 
                     for (ServerPlayer sp : serverLevel.players()) {
                         sp.connection.send(new ClientboundStopSoundPacket(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"), SoundSource.PLAYERS));
@@ -169,7 +158,7 @@ public class DoombringerItem extends Item implements GeoItem {
             } else {
                 triggerAnim(player, id, "main_controller", "anim_pat");
                 if (!isFriendly(stack)) {
-                    StartTick = -1;
+                    tickCount = 1;
                 }
             }
         }

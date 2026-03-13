@@ -15,6 +15,9 @@
       }
     ]
   },
+  "dozy_tick": {
+    "sounds": ["gracecraft:dozy_tick"]
+  },
   "dozy_attack": {
     "subtitle": "sounds.gracecraft.dozy_attack",
     "sounds": [

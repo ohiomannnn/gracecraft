@@ -96,7 +96,7 @@ public class EntityLitany {
                     playSoundEntity(player, 4);
                     assert player != null;
                     //GraceCraftNetwork.sendKillToServerWLitany(player.getUUID());
-                    mc.setOverlay(new LitanyKillOverlay());
+                    mc.setOverlay(new LitanyKillOverlay(mc));
                     active = false;
                     endOthersFromLitany = true;
                     return;

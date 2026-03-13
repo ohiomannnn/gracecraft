@@ -135,7 +135,7 @@ configurations {
 
 dependencies {
     // Geckolib!!!
-    implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.7.7"
+    implementation("software.bernie.geckolib:geckolib-neoforge-1.21.1:4.7.7")
 }
 
 tasks.withType(ProcessResources).configureEach {
