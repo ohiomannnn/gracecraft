@@ -48,7 +48,7 @@ public class LitanyKillOverlay extends Overlay {
     private final RandomSource random = RandomSource.create();
 
     private static final ResourceLocation LITANY_KILL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_kill.png");
-    private static final ResourceLocation WDYL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/why_did_you_listen.png");
+    private static final ResourceLocation WDYL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/why.png");
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {

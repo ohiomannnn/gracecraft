@@ -24,7 +24,7 @@ public abstract class Entity {
         }
     }
 
-    public abstract void render(GuiGraphics graphics);
+    public abstract void render(GuiGraphics guiGraphics);
 
     public void remove() {
         this.dead = true;

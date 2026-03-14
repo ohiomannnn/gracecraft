@@ -3,12 +3,11 @@ package ohiomannnn.gracecraft.entityLogic.entities;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.Entity;
 import ohiomannnn.gracecraft.entityLogic.killOverlays.DozerKillOverlay;
 import ohiomannnn.gracecraft.sounds.InitSounds;
-
-import java.util.Random;
 
 public class Dozer extends Entity {
 
@@ -20,26 +19,27 @@ public class Dozer extends Entity {
     private static final int AWAKE_W_KILL = 1;
 
     private boolean soundPlayed = false;
-    private static final Random rng = new Random();
+
+    private static final RandomSource rng = RandomSource.create();
 
     public Dozer() {
         this.lifetime = DURATION_TICKS;
     }
 
     @Override
-    public void render(GuiGraphics graphics) {
+    public void render(GuiGraphics guiGraphics) {
 
         if (mc.player.isDeadOrDying()) return;
 
-        int screenWidth = mc.getWindow().getGuiScaledWidth();
-        int screenHeight = mc.getWindow().getGuiScaledHeight();
-        int x = (screenWidth - 200) / 2 + rng.nextInt(3);
-        int y = (screenHeight - 200) / 2 + rng.nextInt(3);
+        int width = mc.getWindow().getGuiScaledWidth();
+        int height = mc.getWindow().getGuiScaledHeight();
+        int x = (width  - 200) / 2 + rng.nextInt(3);
+        int y = (height - 200) / 2 + rng.nextInt(3);
 
         boolean showEnd = age >= (DURATION_TICKS - AWAKE_W_NO_KILL);
         ResourceLocation texture = showEnd ? DOZER_AWAKE : DOZER_SLEEP;
 
-        graphics.blit(texture, x, y, 200, 200, 0, 0, 400, 400, 400, 400);
+        guiGraphics.blit(texture, x, y, 180, 180, 0, 0, 400, 400, 400, 400);
 
         if (!soundPlayed) {
             mc.getSoundManager().play(SimpleSoundInstance.forLocalAmbience(InitSounds.DOZY_ATTACK.get(), 1.0F, 1.0F));
@@ -49,7 +49,7 @@ public class Dozer extends Entity {
         if (age >= (DURATION_TICKS - AWAKE_W_KILL) && !GraceCraft.isCrouchingDozer && !kill) {
             this.remove();
             mc.getSoundManager().stop();
-            mc.setOverlay(new DozerKillOverlay(mc, x, y));
+            mc.setOverlay(new DozerKillOverlay(x, y));
             this.kill = true;
         }
     }

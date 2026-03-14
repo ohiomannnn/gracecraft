@@ -8,6 +8,8 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 import ohiomannnn.gracecraft.GraceCraft;
+import ohiomannnn.gracecraft.client.sprites.AnimatedSpriteSheet;
+import ohiomannnn.gracecraft.client.sprites.SpriteSheet;
 import ohiomannnn.gracecraft.network.killPackets.KillGeneric;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 
@@ -16,9 +18,9 @@ import java.util.List;
 
 public class DozerKillOverlay extends Overlay {
 
-    private static final ResourceLocation DOZER_KILL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz_kill.png");
-    private static final ResourceLocation DOZER_KILL_HA = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz_kill_ha.png");
     private static final ResourceLocation WILL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/will.png");
+
+    private final AnimatedSpriteSheet DOZY;
 
     private final List<AEntry> messages = new ArrayList<>();
 
@@ -27,10 +29,15 @@ public class DozerKillOverlay extends Overlay {
 
     private final Minecraft mc;
 
-    public DozerKillOverlay(Minecraft mc, int x, int y) {
-        this.mc = mc;
+    public DozerKillOverlay(int x, int y) {
+        this.mc = Minecraft.getInstance();
         this.x = x;
         this.y = y;
+        DOZY = new AnimatedSpriteSheet(
+                new SpriteSheet(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz_sprites.png"), 1600, 400, 400, 400),
+                new long[]{ 50, 50, 450, 50 }
+        );
+        DOZY.setLooping(false);
     }
 
     private static final int TO_CLOSE_MS = 1300;
@@ -61,8 +68,7 @@ public class DozerKillOverlay extends Overlay {
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
 
-        ResourceLocation texture = elapsedMillis <= 400 ? DOZER_KILL_HA : DOZER_KILL;
-        guiGraphics.blit(texture, x, y, 200, 200, 0, 0, 300, 300, 300, 300);
+        DOZY.render(guiGraphics, x, y, 180, 180);
 
         if (elapsedMillis >= TO_CLOSE_MS) {
             mc.setOverlay(null);
