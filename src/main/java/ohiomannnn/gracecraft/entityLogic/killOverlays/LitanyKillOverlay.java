@@ -5,29 +5,39 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
+import net.neoforged.neoforge.network.PacketDistributor;
 import ohiomannnn.gracecraft.GraceCraft;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
+import ohiomannnn.gracecraft.network.killPackets.KillGeneric;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class LitanyKillOverlay extends Overlay {
+
+    public static final Map<Integer, Long> screamers = new HashMap<>();
+    private final Set<Integer> triggeredScreamers = new HashSet<>();
+    private final Set<Integer> modifiedScreamers = new HashSet<>();
+    private final Map<Integer, AEntry> createdEntries = new HashMap<>();
+
+    static {
+        screamers.put(1, 1290L);
+        screamers.put(2, 1690L);
+        screamers.put(3, 1950L);
+        screamers.put(4, 2167L);
+        screamers.put(5, 2341L);
+        screamers.put(6, 2485L);
+        screamers.put(7, 2600L);
+        screamers.put(8, 2700L);
+        screamers.put(9, 2800L);
+    }
+
+    private static final long MS_GLITCH = 2900;
 
     private static final int IMAGE_WIDTH = 165;
     private static final int IMAGE_HEIGHT = 165;
 
-    private static final long MS_FIRST = 1290;
-    private static final long MS_SECOND = 1690;
-    private static final long MS_THIRD = 1950;
-
     private static final long MS_END = 4700;
-
-    private static final float MAX_SCALE_HEIGHT = 4.7f;
-    private static final float MIN_SCALE_HEIGHT = 0.8f;
-
-    private static final float MAX_SCALE_WIDTH = 5.5f;
-    private static final float MIN_SCALE_WIDTH = 1.0f;
 
     private final Minecraft mc;
 
@@ -36,16 +46,17 @@ public class LitanyKillOverlay extends Overlay {
     }
 
     private final List<AEntry> messages = new ArrayList<>();
+    private final List<AEntry> savedM = new ArrayList<>();
 
+    // flag
     private boolean firstAdded = false;
-    private boolean secondAdded = false;
-    private boolean thirdAdded = false;
-    private boolean fAdded = false;
-    private boolean barrageStarted = false;
 
     private long startTimeMillis = -1;
 
-    private final RandomSource random = RandomSource.create();
+    private long lastMessageMillis = 0;
+    private static final long MESSAGE_INTERVAL_MS = 33;
+
+    private static final Random RANDOM = new Random();
 
     private static final ResourceLocation LITANY_KILL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/entity_litany_kill.png");
     private static final ResourceLocation WDYL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/why.png");
@@ -72,39 +83,44 @@ public class LitanyKillOverlay extends Overlay {
             firstAdded = true;
         }
 
-        if (!secondAdded && elapsedMillis >= MS_FIRST) {
-            messages.add(new AEntry(width - 220, 40, 1.0F, 1.0F));
-            secondAdded = true;
+        for (Entry<Integer, Long> longEntry : screamers.entrySet()) {
+            int key = longEntry.getKey();
+            long triggerTime = longEntry.getValue();
+
+            if (!triggeredScreamers.contains(key) && elapsedMillis >= triggerTime) {
+                AEntry e = new AEntry(RANDOM.nextInt(width), RANDOM.nextInt(height), 1.0F, 1.0F);
+                messages.add(e);
+                savedM.add(e);
+                triggeredScreamers.add(key);
+                createdEntries.put(key, e);
+            }
+
+            if (!modifiedScreamers.contains(key) && elapsedMillis >= triggerTime + 99L) {
+                AEntry e = createdEntries.get(key);
+                if (e != null) {
+                    e.sx = RANDOM.nextFloat(0.2F, 3F);
+                    e.sy = RANDOM.nextFloat(0.2F, 3F);
+                }
+                modifiedScreamers.add(key);
+            }
         }
 
-        if (!thirdAdded && elapsedMillis >= MS_SECOND) {
-            messages.add(new AEntry(width - 60, 52, 1.0F, 1.0F));
-            thirdAdded = true;
-        }
+        if (elapsedMillis >= MS_GLITCH) {
+            if (now - lastMessageMillis >= MESSAGE_INTERVAL_MS) {
+                lastMessageMillis = now;
 
-        if (!fAdded && elapsedMillis >= MS_THIRD) {
-            messages.add(new AEntry(width - 400, 44, 1.0F, 1.0F));
-            fAdded = true;
+                savedM.replaceAll(aEntry -> {
+                    AEntry e = new AEntry(aEntry.x, aEntry.y + 5, aEntry.sx, aEntry.sy);
+                    messages.add(e);
+                    return e;
+                });
+            }
         }
-
-//        if (!barrageStarted && elapsedMillis >= TICKS_BARRAGE * 50L) {
-//            barrageStarted = true;
-//        }
-//
-//        if (barrageStarted) {
-//            int perTick = 1;
-//            for (int i = 0; i < perTick; i++) {
-//                float sx = randScaleWidth();
-//                float sy = randScaleHeight();
-//                int x = random.nextInt(Math.max(1, screenWidth));
-//                int y = random.nextInt(Math.max(1, screenHeight));
-//                messages.add(new AEntry(x, y, sx, sy));
-//            }
-//        }
 
         // end
         if (elapsedMillis >= MS_END) {
             mc.setOverlay(null);
+            PacketDistributor.sendToServer(new KillGeneric("litany"));
         }
 
         // render vals
@@ -118,19 +134,17 @@ public class LitanyKillOverlay extends Overlay {
             guiGraphics.blit(WDYL, -renderW / 2, -renderH / 2, renderW, renderH, 0, 0, 327, 162, 327, 162);
             poseStack.popPose();
         }
-    }
-    private float randScaleHeight() {
-        return MIN_SCALE_HEIGHT * (MAX_SCALE_HEIGHT - MIN_SCALE_HEIGHT);
-    }
-    private float randScaleWidth() {
-        return MIN_SCALE_WIDTH * (MAX_SCALE_WIDTH - MIN_SCALE_WIDTH);
+
+        if (elapsedMillis >= MS_END - 535) {
+            guiGraphics.fill(0, 0, width, height, 0xFF000000);
+        }
     }
 
     private static class AEntry {
         // pos
-        int x, y;
+        public int x, y;
         // scale
-        float sx, sy;
+        public float sx, sy;
 
         AEntry(int x, int y, float sx, float sy) {
             this.x = x;

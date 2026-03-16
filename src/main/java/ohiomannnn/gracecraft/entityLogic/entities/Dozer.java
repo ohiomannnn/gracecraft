@@ -5,11 +5,11 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.entityLogic.Entity;
+import ohiomannnn.gracecraft.entityLogic.ScreenEntity;
 import ohiomannnn.gracecraft.entityLogic.killOverlays.DozerKillOverlay;
 import ohiomannnn.gracecraft.sounds.InitSounds;
 
-public class Dozer extends Entity {
+public class Dozer extends ScreenEntity {
 
     private static final ResourceLocation DOZER_SLEEP = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz.png");
     private static final ResourceLocation DOZER_AWAKE = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz_awake.png");
@@ -33,8 +33,8 @@ public class Dozer extends Entity {
 
         int width = mc.getWindow().getGuiScaledWidth();
         int height = mc.getWindow().getGuiScaledHeight();
-        int x = (width  - 200) / 2 + rng.nextInt(3);
-        int y = (height - 200) / 2 + rng.nextInt(3);
+        int x = (width - 200) / 2 + rng.nextInt(2);
+        int y = (height - 200) / 2 + rng.nextInt(2);
 
         boolean showEnd = age >= (DURATION_TICKS - AWAKE_W_NO_KILL);
         ResourceLocation texture = showEnd ? DOZER_AWAKE : DOZER_SLEEP;

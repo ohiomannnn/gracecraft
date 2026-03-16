@@ -8,6 +8,7 @@ public class CommonConfig {
 
     public final ModConfigSpec.IntValue DOZER_SPAWN;
     public final ModConfigSpec.IntValue LITANY_SPAWN;
+    public final ModConfigSpec.IntValue SORROW_SPAWN;
 
     public final ModConfigSpec.IntValue RAND_VALUE;
 
@@ -24,6 +25,10 @@ public class CommonConfig {
                 .comment("How many world ticks need to pass for a Litany spawn to be performed.")
                 .translation("gracecraft.configuration.litany_spawn")
                 .defineInRange("litany_spawn", 800, 0, Integer.MAX_VALUE);
+        SORROW_SPAWN = builder
+                .comment("How many world ticks need to pass for a Sorrow spawn to be performed.")
+                .translation("gracecraft.configuration.sorrow_spawn")
+                .defineInRange("sorrow_spawn", 1700, 0, Integer.MAX_VALUE);
         RAND_VALUE = builder
                 .comment("How much random ticks will be added to the spawn countdown")
                 .translation("gracecraft.configuration.rand_value")

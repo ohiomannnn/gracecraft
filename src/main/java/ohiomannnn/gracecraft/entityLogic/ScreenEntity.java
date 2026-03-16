@@ -3,7 +3,7 @@ package ohiomannnn.gracecraft.entityLogic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
-public abstract class Entity {
+public abstract class ScreenEntity {
 
     public boolean dead;
 
@@ -14,7 +14,7 @@ public abstract class Entity {
     public int age;
     public int lifetime = 200;
 
-    public Entity() {
+    public ScreenEntity() {
         this.mc = Minecraft.getInstance();
     }
 

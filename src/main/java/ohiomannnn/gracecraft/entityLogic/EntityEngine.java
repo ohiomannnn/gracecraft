@@ -3,44 +3,51 @@ package ohiomannnn.gracecraft.entityLogic;
 import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-// engine for saving, rendering, entities, neat
 public class EntityEngine {
 
     public static final EntityEngine INSTANCE = new EntityEngine();
 
-    private final List<Entity> entities;
+    private final List<ScreenEntity> entities = new ArrayList<>();
+    private final List<ScreenEntity> pendingEntities = new ArrayList<>();
 
-    public EntityEngine() {
-        this.entities = new ArrayList<>();
+    public EntityEngine() { }
+
+    public void clear() {
+        this.entities.clear();
     }
 
-    public void add(Entity entity) {
+    public void add(ScreenEntity entity) {
         this.entities.add(entity);
     }
 
     public void tick() {
-        this.tickList(this.entities);
-    }
+        // we dont need to process empty lists
+        if (this.entities.isEmpty() && pendingEntities.isEmpty()) return;
 
-    private void tickList(List<Entity> entities) {
-        if (entities.isEmpty()) return;
+        if (!pendingEntities.isEmpty()) {
+            entities.addAll(pendingEntities);
+            pendingEntities.clear();
+        }
 
-        for (Entity entity : new ArrayList<>(entities)) {
-            if (entity == null) continue;
-            entity.tick();
-            if (entity.dead) {
-                entities.remove(entity);
+        Iterator<ScreenEntity> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            ScreenEntity particle = iterator.next();
+
+            particle.tick();
+            if (particle.dead) {
+                iterator.remove();
             }
         }
-    }
 
+        if (!pendingEntities.isEmpty()) {
+            entities.addAll(pendingEntities);
+            pendingEntities.clear();
+        }
+    }
     public void render(GuiGraphics graphics) {
         this.entities.forEach(entity -> entity.render(graphics));
-    }
-
-    public void clear() {
-        this.entities.clear();
     }
 }

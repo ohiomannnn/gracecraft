@@ -45,7 +45,7 @@ public class DoombringerItem extends Item implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private static final int TO_SCREAM = 250;
-    private static final int TO_EXPLOSION = 365;
+    private static final int TO_EXPLOSION = 470;
 
     private long tickCount = 0;
     private boolean canShut = false;
@@ -93,10 +93,9 @@ public class DoombringerItem extends Item implements GeoItem {
         if (!(entity instanceof Player player)) return;
         if (isFriendly(stack)) return;
 
-        GraceCraft.LOGGER.info("t = {}", tickCount);
         tickCount++;
 
-        if (tickCount == TO_SCREAM) {
+        if (tickCount >= TO_SCREAM) {
             if (!level.isClientSide) {
 
                 if (!soundPlayed) {
@@ -115,17 +114,19 @@ public class DoombringerItem extends Item implements GeoItem {
         }
 
 
-        if (tickCount == TO_EXPLOSION) {
+        if (tickCount >= TO_EXPLOSION) {
             if (!level.isClientSide) {
 
                 for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                     ItemStack stackToDel = player.getInventory().getItem(i);
                     if (stackToDel.getItem() instanceof DoombringerItem && !isFriendly(stackToDel)) {
+                        tickCount = 0;
+                        soundPlayed = false;
                         player.getInventory().setItem(i, ItemStack.EMPTY);
                     }
                 }
 
-                level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 2.0F, (1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F) * 0.7F);
+                level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 10.0F, (1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F) * 0.7F);
 
                 if (level instanceof ServerLevel serverLevel) {
                     serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, player.getX(), player.getEyeY(), player.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);

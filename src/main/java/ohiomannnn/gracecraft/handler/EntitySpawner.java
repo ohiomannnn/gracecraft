@@ -5,6 +5,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import ohiomannnn.gracecraft.config.GraceCraftConfig;
+import ohiomannnn.gracecraft.entity.InitEntities;
+import ohiomannnn.gracecraft.entity.Sorrow;
 import ohiomannnn.gracecraft.network.GraceCraftNetwork;
 import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 
@@ -16,6 +18,7 @@ public class EntitySpawner {
 
     public static int DOZER_SPAWN = GraceCraftConfig.COMMON.DOZER_SPAWN.get();
     public static int LITANY_SPAWN = GraceCraftConfig.COMMON.LITANY_SPAWN.get();
+    public static int SORROW_SPAWN = GraceCraftConfig.COMMON.SORROW_SPAWN.get();
 
     public static void rollTheDice(Level level) {
         if (!GraceCraftConfig.COMMON.SPAWN_ENTITY_RANDOM.get()) return;
@@ -31,6 +34,16 @@ public class EntitySpawner {
                 Player player = level.players().get(level.random.nextInt(level.players().size()));
 
                 PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("EntityLitany"));
+            }
+        }
+
+        if (level.getGameTime() % (SORROW_SPAWN + random.nextInt(GraceCraftConfig.COMMON.RAND_VALUE.get())) == 0) {
+            if (!level.players().isEmpty()) {
+                Player player = level.players().get(level.random.nextInt(level.players().size()));
+
+                Sorrow entity = new Sorrow(InitEntities.SORROW.get(), level);
+                entity.setPos(player.getX(), player.getY(), player.getZ());
+                level.addFreshEntity(entity);
             }
         }
     }

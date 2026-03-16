@@ -20,7 +20,7 @@ public class DozerKillOverlay extends Overlay {
 
     private static final ResourceLocation WILL = ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/will.png");
 
-    private final AnimatedSpriteSheet DOZY;
+    private final AnimatedSpriteSheet dozy;
 
     private final List<AEntry> messages = new ArrayList<>();
 
@@ -33,11 +33,11 @@ public class DozerKillOverlay extends Overlay {
         this.mc = Minecraft.getInstance();
         this.x = x;
         this.y = y;
-        DOZY = new AnimatedSpriteSheet(
+        dozy = new AnimatedSpriteSheet(
                 new SpriteSheet(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz_sprites.png"), 1600, 400, 400, 400),
                 new long[]{ 50, 50, 450, 50 }
         );
-        DOZY.setLooping(false);
+        dozy.setLooping(false);
     }
 
     private static final int TO_CLOSE_MS = 1300;
@@ -68,7 +68,7 @@ public class DozerKillOverlay extends Overlay {
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
 
-        DOZY.render(guiGraphics, x, y, 180, 180);
+        dozy.render(guiGraphics, x, y, 180, 180);
 
         if (elapsedMillis >= TO_CLOSE_MS) {
             mc.setOverlay(null);
