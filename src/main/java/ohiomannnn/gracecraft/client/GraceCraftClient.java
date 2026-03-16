@@ -28,7 +28,6 @@ import ohiomannnn.gracecraft.util.Clock;
 @EventBusSubscriber(modid = GraceCraft.MOD_ID, value = Dist.CLIENT)
 public class GraceCraftClient {
     public GraceCraftClient(IEventBus modEventBus, ModContainer container) {
-        modEventBus.addListener(GraceCraftClientNetwork::registerClientPackets);
 
         modEventBus.addListener(EntityLitany::RegisterGuiLayers);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
