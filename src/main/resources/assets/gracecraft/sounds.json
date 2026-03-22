@@ -15,6 +15,9 @@
       }
     ]
   },
+  "sine": {
+    "sounds": ["gracecraft:sine"]
+  },
   "dozy_tick": {
     "sounds": ["gracecraft:dozy_tick"]
   },

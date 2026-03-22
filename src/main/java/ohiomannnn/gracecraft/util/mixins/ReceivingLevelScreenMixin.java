@@ -29,10 +29,12 @@ public abstract class ReceivingLevelScreenMixin extends Screen {
         int x = (width - 50) / 2;
         int y = (height - 50) / 2;
 
-        guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
-        guiGraphics.blit(GOD, x, y, 50, 50, 0, 0, 256, 256, 256, 256);
-
         double time = System.currentTimeMillis() / 1000.0;
+        int oy = (int) (Math.sin(time * 5) * 2);
+
+        guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
+        guiGraphics.blit(GOD, x, y + oy, 50, 50, 0, 0, 256, 256, 256, 256);
+
         double speed = 6.0;
 
         double rangeX = 15.0;
@@ -41,6 +43,6 @@ public abstract class ReceivingLevelScreenMixin extends Screen {
         int offsetX = (int) (Math.sin(time * speed) * rangeX);
         int offsetY = (int) (Math.sin(time * speed * 2) * rangeY);
 
-        guiGraphics.drawCenteredString(this.font, "It's almost time", (x + offsetX) + 20, (y + offsetY) + 60, 0xFFFFFFFF);
+        guiGraphics.drawCenteredString(this.font, "It's almost time.", (x + offsetX) + 20, (y + offsetY) + 60, 0xFFFFFFFF);
     }
 }
