@@ -1,5 +1,6 @@
 package ohiomannnn.gracecraft.entityLogic.entities;
 
+import com.mojang.math.Axis;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,9 @@ public class Dozer extends ScreenEntity {
 
     private static final RandomSource rng = RandomSource.create();
 
+    boolean mirrored = false;
+    long lastSwitch = 0;
+
     public Dozer() {
         this.lifetime = DURATION_TICKS;
     }
@@ -31,15 +35,39 @@ public class Dozer extends ScreenEntity {
 
         if (mc.player.isDeadOrDying()) return;
 
+        long now = System.currentTimeMillis();
+        if (now - lastSwitch >= 100) {
+            mirrored = !mirrored;
+            lastSwitch = now;
+        }
+
         int width = mc.getWindow().getGuiScaledWidth();
         int height = mc.getWindow().getGuiScaledHeight();
-        int x = (width - 200) / 2 + rng.nextInt(2);
-        int y = (height - 200) / 2 + rng.nextInt(2);
+        int x = (width - 180) / 2;
+        int y = (height - 180) / 2;
 
         boolean showEnd = age >= (DURATION_TICKS - AWAKE_W_NO_KILL);
         ResourceLocation texture = showEnd ? DOZER_AWAKE : DOZER_SLEEP;
 
-        guiGraphics.blit(texture, x, y, 180, 180, 0, 0, 400, 400, 400, 400);
+        long steppedTime = (System.currentTimeMillis() / 300) * 300;
+        double time = steppedTime / 1000.0;
+        int offsetX = (int) (Math.cos(time * 3) * 5.0) + rng.nextInt(2);
+        int offsetY = (int) (Math.sin(time * 3) * 3.0) + rng.nextInt(3);
+
+        float angle = 1F + rng.nextFloat() * 2F;
+        if (mirrored) angle = -angle;
+
+        guiGraphics.pose().pushPose();
+
+        float centerX = x + offsetX + (180 / 2.0f);
+        float centerY = y + offsetY + (180 / 2.0f);
+
+        guiGraphics.pose().translate(centerX, centerY, 0);
+        guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
+
+        guiGraphics.blit(texture, -180 / 2, -180 / 2, 180, 180, 0, 0, mirrored ? -400 : 400, 400, 400, 400);
+
+        guiGraphics.pose().popPose();
 
         if (!soundPlayed) {
             mc.getSoundManager().play(SimpleSoundInstance.forLocalAmbience(InitSounds.DOZY_ATTACK.get(), 1.0F, 1.0F));
@@ -49,7 +77,7 @@ public class Dozer extends ScreenEntity {
         if (age >= (DURATION_TICKS - AWAKE_W_KILL) && !GraceCraft.isCrouchingDozer && !kill) {
             this.remove();
             mc.getSoundManager().stop();
-            mc.setOverlay(new DozerKillOverlay(x, y));
+            mc.setOverlay(new DozerKillOverlay(x + offsetX, y + offsetY, angle));
             this.kill = true;
         }
     }

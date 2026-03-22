@@ -1,5 +1,6 @@
 package ohiomannnn.gracecraft.entityLogic.entities;
 
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -65,6 +66,9 @@ public class EntityLitany {
 
     public static boolean endOthersFromLitany = false;
 
+    public static boolean mirrored = false;
+    public static long lastSwitch = 0;
+
     public static void start() {
         active = true;
         cycleStartTick = -1;
@@ -91,17 +95,6 @@ public class EntityLitany {
 
             long ticksInCycle = t - cycleStartTick;
 
-            if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS_W_KILL) {
-                if (!isCrouchingLitany) {
-                    playSoundEntity(player, 4);
-                    assert player != null;
-                    //GraceCraftNetwork.sendKillToServerWLitany(player.getUUID());
-                    mc.setOverlay(new LitanyKillOverlay(mc));
-                    active = false;
-                    endOthersFromLitany = true;
-                    return;
-                }
-            }
             boolean color = false;
 
             if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS) {
@@ -142,12 +135,40 @@ public class EntityLitany {
                 }
             }
 
-            int shakeX = LitanyBaseX + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
-            int shakeY = LitanyBaseY + rng.nextInt(SHAKE_AMPLITUDE * 2 + 1) - SHAKE_AMPLITUDE;
+            long now = System.currentTimeMillis();
+            if (now - lastSwitch >= 100) {
+                mirrored = !mirrored;
+                lastSwitch = now;
+            }
 
+            long steppedTime = (System.currentTimeMillis() / 300) * 300;
+            double time = steppedTime / 1000.0;
+            int offsetX = (int) (Math.cos(time * 3) * 5.0) + rng.nextInt(SHAKE_AMPLITUDE);
+            int offsetY = (int) (Math.sin(time * 3) * 3.0) + rng.nextInt(SHAKE_AMPLITUDE + 1);
+
+            float angle = 1F + rng.nextFloat() * SHAKE_AMPLITUDE + 2;
+            if (mirrored) angle = -angle;
+
+            guiGraphics.pose().pushPose();
+            float centerX = LitanyBaseX + offsetX + (165 / 2.0f);
+            float centerY = LitanyBaseX + offsetY + (165 / 2.0f);
+            guiGraphics.pose().translate(centerX, centerY, 0);
+            guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
             guiGraphics.setColor(1.0F, color ? 0.0F : 1.0F, color ? 0.0F : 1.0F, 1.0F);
-            guiGraphics.blit(texture, shakeX, shakeY, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+            guiGraphics.blit(texture, -165 / 2, -165 / 2, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
             guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            guiGraphics.pose().popPose();
+
+            if (ticksInCycle >= DURATION_TICKS - FINAL_SWITCH_TICKS_W_KILL) {
+                if (!isCrouchingLitany) {
+                    playSoundEntity(player, 4);
+                    assert player != null;
+                    mc.setOverlay(new LitanyKillOverlay(LitanyBaseX + offsetX, LitanyBaseX + offsetY));
+                    active = false;
+                    endOthersFromLitany = true;
+                    return;
+                }
+            }
 
             if (ticksInCycle >= DURATION_TICKS) {
                 cyclesDone++;
@@ -164,10 +185,30 @@ public class EntityLitany {
     private static void chooseNewPosition(Minecraft mc) {
         int w = mc.getWindow().getGuiScaledWidth();
         int h = mc.getWindow().getGuiScaledHeight();
-        int maxX = Math.max(0, w - IMAGE_WIDTH);
-        int maxY = Math.max(0, h - IMAGE_HEIGHT);
-        LitanyBaseX = (maxX > 0) ? rng.nextInt(maxX + 1) : 0;
-        LitanyBaseY = (maxY > 0) ? rng.nextInt(maxY + 1) : 0;
+
+        int maxOffsetX = 5 + SHAKE_AMPLITUDE;
+        int maxOffsetY = 3 + SHAKE_AMPLITUDE + 1;
+
+        int minOffsetX = -5;
+        int minOffsetY = -3;
+
+        int xMin = -minOffsetX;
+        int xMax = w - 165 - maxOffsetX;
+
+        int yMin = -minOffsetY;
+        int yMax = h - 165 - maxOffsetY;
+
+        if (xMax <= xMin) {
+            LitanyBaseX = xMin;
+        } else {
+            LitanyBaseX = xMin + rng.nextInt(xMax - xMin);
+        }
+
+        if (yMax <= yMin) {
+            LitanyBaseY = yMin;
+        } else {
+            LitanyBaseY = yMin + rng.nextInt(yMax - yMin);
+        }
     }
 
     private static void playSoundEntity(Player player, int audio) {

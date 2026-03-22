@@ -1,6 +1,7 @@
 package ohiomannnn.gracecraft.entityLogic.killOverlays;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Overlay;
@@ -26,13 +27,15 @@ public class DozerKillOverlay extends Overlay {
 
     private final int x;
     private final int y;
+    private final float angle;
 
     private final Minecraft mc;
 
-    public DozerKillOverlay(int x, int y) {
+    public DozerKillOverlay(int x, int y, float angle) {
         this.mc = Minecraft.getInstance();
         this.x = x;
         this.y = y;
+        this.angle = angle;
         dozy = new AnimatedSpriteSheet(
                 new SpriteSheet(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "textures/entities/doz_sprites.png"), 1600, 400, 400, 400),
                 new long[]{ 50, 50, 450, 50 }
@@ -49,6 +52,8 @@ public class DozerKillOverlay extends Overlay {
 
     // flag
     private boolean firstMessageShown = false;
+    // flag
+    private boolean kill = false;
     // flag
     private boolean soundPlayed = false;
 
@@ -68,15 +73,24 @@ public class DozerKillOverlay extends Overlay {
 
         guiGraphics.fill(0, 0, screenWidth, screenHeight, 0xFF000000);
 
-        dozy.render(guiGraphics, x, y, 180, 180);
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x + (180 / 2.0f), y + (180 / 2.0f), 0);
+        guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
+
+        dozy.render(guiGraphics, -180 / 2, -180 / 2, 180, 180);
+
+        guiGraphics.pose().popPose();
 
         if (elapsedMillis >= TO_CLOSE_MS) {
             mc.setOverlay(null);
-            PacketDistributor.sendToServer(new KillGeneric("dozer"));
+            if (!kill) {
+                PacketDistributor.sendToServer(new KillGeneric("dozer"));
+                kill = true;
+            }
         }
 
         if (!firstMessageShown) {
-            messages.add(new AEntry(240, screenHeight - 40));
+            messages.add(new AEntry(250, screenHeight - 35));
             firstMessageShown = true;
         }
 
@@ -89,8 +103,8 @@ public class DozerKillOverlay extends Overlay {
                 lastMessageMillis = now;
                 AEntry last = messages.getLast();
                 messages.add(new AEntry(
-                        last.x + 10,
-                        last.y - 10
+                        last.x + 5,
+                        last.y - 5
                 ));
             }
         }

@@ -12,16 +12,18 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import ohiomannnn.gracecraft.GraceCraft;
-import ohiomannnn.gracecraft.client.network.GraceCraftClientNetwork;
 import ohiomannnn.gracecraft.client.render.MimeRenderer;
+import ohiomannnn.gracecraft.client.render.SorrowRenderer;
 import ohiomannnn.gracecraft.entity.InitEntities;
 import ohiomannnn.gracecraft.entityLogic.entities.EntityLitany;
 import ohiomannnn.gracecraft.items.InitItems;
-import ohiomannnn.gracecraft.client.render.SorrowRenderer;
 import ohiomannnn.gracecraft.util.Clock;
 
 @Mod(value = GraceCraft.MOD_ID, dist = Dist.CLIENT)

@@ -18,6 +18,9 @@
   "dozy_tick": {
     "sounds": ["gracecraft:dozy_tick"]
   },
+  "dozy_tick_kill": {
+    "sounds": ["gracecraft:dozy_tick_kill"]
+  },
   "dozy_attack": {
     "subtitle": "sounds.gracecraft.dozy_attack",
     "sounds": [

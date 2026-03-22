@@ -41,8 +41,13 @@ public class LitanyKillOverlay extends Overlay {
 
     private final Minecraft mc;
 
-    public LitanyKillOverlay(Minecraft mc) {
-        this.mc = mc;
+    private final int x;
+    private final int y;
+
+    public LitanyKillOverlay(int x, int y) {
+        this.mc = Minecraft.getInstance();
+        this.x = x;
+        this.y = y;
     }
 
     private final List<AEntry> messages = new ArrayList<>();
@@ -76,7 +81,7 @@ public class LitanyKillOverlay extends Overlay {
         int height = mc.getWindow().getGuiScaledHeight();
 
         guiGraphics.fill(0, 0, width, height, 0xFF000000);
-        guiGraphics.blit(LITANY_KILL, EntityLitany.LitanyBaseX, EntityLitany.LitanyBaseY, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+        guiGraphics.blit(LITANY_KILL, x, y, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         if (!firstAdded) {
             messages.add(new AEntry(width / 2, height / 2, 2F, 1.5F));

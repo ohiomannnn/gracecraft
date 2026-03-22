@@ -19,6 +19,7 @@ public class InitSounds {
     public static final Supplier<SoundEvent> DOZY_ATTACK = registerSoundEvent("dozy_attack");
     public static final Supplier<SoundEvent> DOZY_TICK = registerSoundEvent("dozy_tick");
     public static final Supplier<SoundEvent> DOZY_ATTACK_KILL = registerSoundEvent("dozy_attack_kill");
+    public static final Supplier<SoundEvent> DOZY_TICK_KILL = registerSoundEvent("dozy_tick_kill");
 
     public static final Supplier<SoundEvent> LITANY_ATTACK = registerSoundEvent("litany_attack");
     public static final Supplier<SoundEvent> LITANY_ATTACK_FAST = registerSoundEvent("litany_attack_fast");
