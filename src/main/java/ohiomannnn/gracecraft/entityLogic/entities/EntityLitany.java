@@ -151,7 +151,7 @@ public class EntityLitany {
 
             guiGraphics.pose().pushPose();
             float centerX = LitanyBaseX + offsetX + (165 / 2.0f);
-            float centerY = LitanyBaseX + offsetY + (165 / 2.0f);
+            float centerY = LitanyBaseY + offsetY + (165 / 2.0f);
             guiGraphics.pose().translate(centerX, centerY, 0);
             guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
             guiGraphics.setColor(1.0F, color ? 0.0F : 1.0F, color ? 0.0F : 1.0F, 1.0F);
@@ -163,7 +163,7 @@ public class EntityLitany {
                 if (!isCrouchingLitany) {
                     playSoundEntity(player, 4);
                     assert player != null;
-                    mc.setOverlay(new LitanyKillOverlay(LitanyBaseX + offsetX, LitanyBaseX + offsetY));
+                    mc.setOverlay(new LitanyKillOverlay(LitanyBaseX + offsetX, LitanyBaseY + offsetY));
                     active = false;
                     endOthersFromLitany = true;
                     return;
