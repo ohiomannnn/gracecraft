@@ -19,6 +19,8 @@ public class Dozer extends ScreenEntity {
     private static final int AWAKE_W_NO_KILL = 5;
     private static final int AWAKE_W_KILL = 1;
 
+    private static final int SIZE = 180;
+
     private boolean soundPlayed = false;
 
     private static final RandomSource rng = RandomSource.create();
@@ -43,29 +45,29 @@ public class Dozer extends ScreenEntity {
 
         int width = mc.getWindow().getGuiScaledWidth();
         int height = mc.getWindow().getGuiScaledHeight();
-        int x = (width - 180) / 2;
-        int y = (height - 180) / 2;
+        int x = (width - SIZE) / 2;
+        int y = (height - SIZE) / 2;
 
         boolean showEnd = age >= (DURATION_TICKS - AWAKE_W_NO_KILL);
         ResourceLocation texture = showEnd ? DOZER_AWAKE : DOZER_SLEEP;
 
         long steppedTime = (System.currentTimeMillis() / 300) * 300;
         double time = steppedTime / 1000.0;
-        int offsetX = (int) (Math.cos(time * 3) * 5.0) + rng.nextInt(2);
-        int offsetY = (int) (Math.sin(time * 3) * 3.0) + rng.nextInt(3);
+        int ox = (int) (Math.cos(time * 3) * 5.0) + rng.nextInt(3);
+        int oy = (int) (Math.sin(time * 3) * 3.0) + rng.nextInt(4);
 
         float angle = 1F + rng.nextFloat() * 2F;
         if (mirrored) angle = -angle;
 
         guiGraphics.pose().pushPose();
 
-        float centerX = x + offsetX + (180 / 2.0f);
-        float centerY = y + offsetY + (180 / 2.0f);
+        float cx = x + ox + (SIZE / 2F);
+        float cy = y + oy + (SIZE / 2F);
 
-        guiGraphics.pose().translate(centerX, centerY, 0);
+        guiGraphics.pose().translate(cx, cy, 0);
         guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
 
-        guiGraphics.blit(texture, -180 / 2, -180 / 2, 180, 180, 0, 0, mirrored ? -400 : 400, 400, 400, 400);
+        guiGraphics.blit(texture, -SIZE / 2, -SIZE / 2, SIZE, SIZE, 0, 0, mirrored ? -400 : 400, 400, 400, 400);
 
         guiGraphics.pose().popPose();
 
@@ -77,7 +79,7 @@ public class Dozer extends ScreenEntity {
         if (age >= (DURATION_TICKS - AWAKE_W_KILL) && !GraceCraft.isCrouchingDozer && !kill) {
             this.remove();
             mc.getSoundManager().stop();
-            mc.setOverlay(new DozerKillOverlay(x + offsetX, y + offsetY, angle));
+            mc.setOverlay(new DozerKillOverlay(x + ox, y + oy, angle));
             this.kill = true;
         }
     }
