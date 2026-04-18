@@ -20,9 +20,8 @@
   "sounds.gracecraft.litany_attack_jumpscare": "A",
   "sounds.gracecraft.litany_attack_kill": "why did you listen?",
 
-  "commands.gracecraft.spawnentity.playernotfound": "Player is not found",
-  "commands.gracecraft.spawnentity.sendtoplayer": "%s sent to player %s",
-  "commands.gracecraft.spawnentity.noAccess": "You do not have permission to execute this command.",
+  "commands.gracecraft.spawnentity.sendtoplayer.single": "%s sent to player %s",
+  "commands.gracecraft.spawnentity.sendtoplayer": "%s sent to %s players",
 
   "death.attack.dozer_attack": "%s was too full of themself",
   "death.attack.litany_attack": "%s was coerced to death",
@@ -31,5 +30,5 @@
   "entity.gracecraft.sorrow": "Sorrow",
 
   "tooltip.gracecraft.doombringer.friendly": "Friendly",
-  "tooltip.gracecraft.doombringer.notFriendly": "NOT Friendly"
+  "tooltip.gracecraft.doombringer.notFriendly": "DON'T"
 }

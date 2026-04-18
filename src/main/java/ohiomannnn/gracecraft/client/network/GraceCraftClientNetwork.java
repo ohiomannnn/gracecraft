@@ -10,14 +10,11 @@ import ohiomannnn.gracecraft.network.showEntity.ShowEntityPacket;
 public final class GraceCraftClientNetwork {
     public static void handleShowOverlayClientBound(ShowEntityPacket msg, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            if (msg.entityName().equals("EntityDozer")) {
+            if (msg.entityName().equals("Dozer")) {
                 EntityEngine.INSTANCE.add(new Dozer());
             }
-            if (msg.entityName().equals("EntityLitany")) {
-                EntityLitany.start();
-            }
-            if (msg.entityName().equals("test")) {
-                EntityEngine.INSTANCE.add(new Litany());
+            if (msg.entityName().equals("Litany")) {
+                EntityEngine.INSTANCE.add(new Litany(msg.addData()));
             }
         });
     }

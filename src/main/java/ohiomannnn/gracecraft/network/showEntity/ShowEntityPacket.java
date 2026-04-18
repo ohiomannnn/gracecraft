@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import ohiomannnn.gracecraft.GraceCraft;
 import org.jetbrains.annotations.NotNull;
 
-public record ShowEntityPacket(String entityName) implements CustomPacketPayload {
+public record ShowEntityPacket(String entityName, int addData) implements CustomPacketPayload {
 
     public static final Type<ShowEntityPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "show_entity"));
 
@@ -15,12 +15,13 @@ public record ShowEntityPacket(String entityName) implements CustomPacketPayload
             new StreamCodec<>() {
                 @Override
                 public ShowEntityPacket decode(FriendlyByteBuf buf) {
-                    return new ShowEntityPacket(buf.readUtf());
+                    return new ShowEntityPacket(buf.readUtf(), buf.readInt());
                 }
 
                 @Override
                 public void encode(FriendlyByteBuf buf, ShowEntityPacket msg) {
                     buf.writeUtf(msg.entityName());
+                    buf.writeInt(msg.addData);
                 }
             };
 

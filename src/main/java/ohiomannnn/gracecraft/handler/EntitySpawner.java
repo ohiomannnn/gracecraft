@@ -26,14 +26,14 @@ public class EntitySpawner {
             if (!level.players().isEmpty()) {
                 Player player = level.players().get(level.random.nextInt(level.players().size()));
 
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("EntityDozer"));
+                PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("Dozer", 0));
             }
         }
         if (level.getGameTime() % (LITANY_SPAWN + random.nextInt(GraceCraftConfig.COMMON.RAND_VALUE.get())) == 0) {
             if (!level.players().isEmpty()) {
                 Player player = level.players().get(level.random.nextInt(level.players().size()));
 
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("EntityLitany"));
+                PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowEntityPacket("Litany", 0));
             }
         }
 

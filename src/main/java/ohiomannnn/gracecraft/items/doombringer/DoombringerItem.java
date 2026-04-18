@@ -117,11 +117,13 @@ public class DoombringerItem extends Item implements GeoItem {
         if (tickCount >= TO_EXPLOSION) {
             if (!level.isClientSide) {
 
+                canShut = false;
+                tickCount = 0;
+                soundPlayed = false;
+
                 for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                     ItemStack stackToDel = player.getInventory().getItem(i);
-                    if (stackToDel.getItem() instanceof DoombringerItem && !isFriendly(stackToDel)) {
-                        tickCount = 0;
-                        soundPlayed = false;
+                    if (stackToDel.is(this) && !isFriendly(stackToDel)) {
                         player.getInventory().setItem(i, ItemStack.EMPTY);
                     }
                 }
@@ -149,6 +151,7 @@ public class DoombringerItem extends Item implements GeoItem {
                     triggerAnim(player, id, "main_controller", "anim_shut");
                     canShut = false;
                     tickCount = 0;
+                    soundPlayed = false;
 
                     for (ServerPlayer sp : serverLevel.players()) {
                         sp.connection.send(new ClientboundStopSoundPacket(ResourceLocation.fromNamespaceAndPath(GraceCraft.MOD_ID, "joey_scream"), SoundSource.PLAYERS));

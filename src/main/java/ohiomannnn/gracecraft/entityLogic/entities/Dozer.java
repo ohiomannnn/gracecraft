@@ -76,10 +76,12 @@ public class Dozer extends ScreenEntity {
             soundPlayed = true;
         }
 
-        if (age >= (DURATION_TICKS - AWAKE_W_KILL) && !GraceCraft.isCrouchingDozer && !kill) {
+        if (age >= (DURATION_TICKS - AWAKE_W_KILL) && !kill) {
             this.remove();
-            mc.getSoundManager().stop();
-            mc.setOverlay(new DozerKillOverlay(x + ox, y + oy, angle));
+            if (!this.mc.player.isSpectator() && !GraceCraft.isCrouchingDozer) {
+                mc.getSoundManager().stop();
+                mc.setOverlay(new DozerKillOverlay(x + ox, y + oy, angle));
+            }
             this.kill = true;
         }
     }
